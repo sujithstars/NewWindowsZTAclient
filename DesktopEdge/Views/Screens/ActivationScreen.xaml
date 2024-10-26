@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="ZitiDesktopEdge.ActivationScreen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZitiDesktopEdge"
+             mc:Ignorable="d" 
+             d:DesignHeight="570" 
+             d:DesignWidth="420">
+    <Grid x:Name="MFAArea" Visibility="Visible" Margin="0,0,0,0">
+        <Border Margin="10,10,10,10" BorderBrush="Black" BorderThickness="8" CornerRadius="10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" Direction="1" RenderingBias="Quality" ShadowDepth="1" Opacity="1"/>
+            </Border.Effect>
+        </Border>
+        <Rectangle x:Name="ActivationBrush" Margin="10,10,10,10" RadiusX="12" RadiusY="12" ClipToBounds="True">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="#131429" Opacity="0.97"/>
+            </Rectangle.Fill>
+            <Rectangle.Stroke>
+                <SolidColorBrush Color="White" Opacity="0.4"></SolidColorBrush>
+            </Rectangle.Stroke>
+        </Rectangle>
+
+        <!-- Activation Setup Screen -->
+
+        <Grid x:Name="ActivationArea" Margin="20,20,20,40" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Content="Activate Shield" Grid.Row="1" FontSize="20" Foreground="#FFFFFF" HorizontalAlignment="Center" FontWeight="Bold" FontFamily="/ZitiDesktopEdge;component/Assets/Fonts/#Russo One"></Label>
+            <Label Content="Activation Code" Grid.Row="3" FontSize="18" Foreground="#FFFFFF" HorizontalAlignment="Center" FontFamily="/ZitiDesktopEdge;component/Assets/Fonts/#Russo One"></Label>
+            <TextBox x:Name="customerKey" Padding="0,5,0,0" Grid.Row="4" BorderThickness="0 0 0 0" TextAlignment="Center" FontSize="16">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="7"/>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+            <Label Content="Computer Name" Grid.Row="5" FontSize="18" Foreground="#FFFFFF" HorizontalAlignment="Center" FontFamily="/ZitiDesktopEdge;component/Assets/Fonts/#Russo One"></Label>
+            <TextBox x:Name="friendlyName" Padding="0,5,0,0" Grid.Row="6" BorderThickness="0 0 0 0" TextAlignment="Center" FontSize="16">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="7"/>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+            <!--OnClick="DoSetupAuthenticate" -->
+            <local:StyledButton x:Name="ActivationSetupButton" Label="Activate" Grid.Row="8" OnClick="DoActivation"></local:StyledButton>
+        </Grid>
+        <Image x:Name="Close" Source="/Assets/Images/close.png" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,40,40,0" Width="10" Height="10" Cursor="Hand" MouseUp="ExecuteClose"></Image>
+    </Grid>
+</UserControl>

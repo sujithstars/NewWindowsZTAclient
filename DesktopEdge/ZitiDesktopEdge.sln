@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZitiDesktopEdge", "ZitiDesktopEdge.csproj", "{FA4291EA-A97E-4854-959F-91EE7B330B37}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugUpdates|Any CPU = DebugUpdates|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Releases|Any CPU = Releases|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA4291EA-A97E-4854-959F-91EE7B330B37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA4291EA-A97E-4854-959F-91EE7B330B37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA4291EA-A97E-4854-959F-91EE7B330B37}.DebugUpdates|Any CPU.ActiveCfg = DebugUpdates|Any CPU
+		{FA4291EA-A97E-4854-959F-91EE7B330B37}.DebugUpdates|Any CPU.Build.0 = DebugUpdates|Any CPU
+		{FA4291EA-A97E-4854-959F-91EE7B330B37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA4291EA-A97E-4854-959F-91EE7B330B37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA4291EA-A97E-4854-959F-91EE7B330B37}.Releases|Any CPU.ActiveCfg = Releases|Any CPU
+		{FA4291EA-A97E-4854-959F-91EE7B330B37}.Releases|Any CPU.Build.0 = Releases|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C1F54AA-1281-4389-B49A-404863FECF6E}
+	EndGlobalSection
+EndGlobal

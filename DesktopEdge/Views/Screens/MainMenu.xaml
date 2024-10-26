@@ -1,0 +1,264 @@
+﻿<UserControl x:Class="ZitiDesktopEdge.MainMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZitiDesktopEdge"
+             mc:Ignorable="d" 
+             x:Name="MainMenuArea"
+             d:DesignHeight="450" d:DesignWidth="450" Margin="1,1,1,1"
+             MinHeight="450">
+
+    <Grid>
+        <Canvas>
+            <Rectangle Name="Arrow" HorizontalAlignment="Center" Height="20" Fill="#000326" VerticalAlignment="Bottom" Width="20" Canvas.Bottom="-10" Canvas.Left="185">
+                <Rectangle.LayoutTransform>
+                    <RotateTransform Angle="-45"/>
+                </Rectangle.LayoutTransform>
+            </Rectangle>
+        </Canvas>
+        <Rectangle Margin="10,10,10,10" Fill="#000326" RadiusY="10" RadiusX="10" ClipToBounds="True"></Rectangle>
+
+        <Grid Margin="20,20,20,-20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Name="MainStack" Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="20,20,20,20">
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="70"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Name="BackArrow" Cursor="Hand" Grid.Column="0" Orientation="Horizontal" Visibility="Collapsed" MouseLeftButtonUp="GoBack">
+                        <Image Source="/Assets/Images/lastArrow.png" Width="20" Height="20"></Image>
+                        <Label FontSize="12" FontWeight="SemiBold" Foreground="White" Content="Back" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"></Label>
+                    </StackPanel>
+                    <Label Name="MenuTitle" MouseDown="Window_MouseDown" Grid.Column="1" Content="Main Menu" HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="White"></Label>
+                    <Image Grid.Column="2" Cursor="Hand" Source="/Assets/Images/x.png" Height="20" Margin="50,4,0,5" MouseUp="HideMenu"></Image>
+                </Grid>
+                <Rectangle HorizontalAlignment="Stretch" Height="1" Fill="#7d8faf" Opacity="0.2"></Rectangle>
+                <StackPanel Name="MainItems" Orientation="Vertical" HorizontalAlignment="Stretch">
+                    <local:MenuItem Label="Protect" Icon="/Assets/Images/intrusion_changed.png" MouseUp="ShowIntrusion"></local:MenuItem>
+                    <local:MenuItem x:Name="IdentitiesButton" Label="Identities" Icon="/Assets/Images/identities.png" MouseUp="ShowIdentities"></local:MenuItem>
+                    <local:MenuItem HorizontalAlignment="Stretch" Width="Auto" MouseUp="ShowAdvanced" Label="Advanced Settings" Icon="/Assets/Images/advanced.png"></local:MenuItem>
+                    <local:MenuItem Label="About" Icon="/Assets/Images/about.png" MouseUp="ShowAbout"></local:MenuItem>
+                    <local:MenuItem Label="Feedback" Icon="/Assets/Images/feedback.png" MouseUp="ShowFeedback"></local:MenuItem>
+                    <local:MenuItem Label="Support" Icon="/Assets/Images/support.png" MouseUp="ShowSupport"></local:MenuItem>
+                    <!--<local:MenuItem x:Name="AttachButton" Label="Attach App" Icon="/Assets/Images/detach.png" MouseUp="RetachWindow" Visibility="Collapsed"></local:MenuItem>-->
+                    <Label Name="UpdateTimeLeft" Visibility="Collapsed" Content="" HorizontalAlignment="Center" FontSize="10" Height="50" Padding="0,30,0,0" Foreground="#F4044D" Margin="0,-20,0,0" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"></Label>
+                    <Button Name="ForceUpdate" Visibility="Collapsed" Height="40" Grid.Column="1" Margin="20,20,40,0" Width="260" Cursor="Hand" BorderThickness="0" Foreground="#FFFFFF" Background="#dc252c" Content="Update Now" Click="TriggerUpdate_Click" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                    <StackPanel Name="AboutItems" Visibility="Collapsed" Orientation="Vertical" HorizontalAlignment="Stretch">
+                        <TextBlock Text="Shield Endpoint protects your device by filtering out harmful connections. It also allows you to access network endpoints in the same trusted network."
+               Margin="0,10,0,10" TextWrapping="Wrap" MaxWidth="300" TextAlignment="Left"
+               Padding="0,5,0,5" FontSize="14" Foreground="White"/>
+                        <local:SubMenuItem HorizontalAlignment="Stretch" Width="Auto" Label="Privacy Policy" MouseUp="ShowPrivacy"></local:SubMenuItem>
+                        <local:SubMenuItem HorizontalAlignment="Stretch" Width="Auto" Label="Terms of Service" MouseUp="ShowTerms"></local:SubMenuItem>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Name="IntrusionItems" Orientation="Vertical" HorizontalAlignment="Stretch" Visibility="Collapsed">
+
+                    <local:SubOptionItem x:Name="ShieldOn" HorizontalAlignment="Stretch" Width="Auto" Label="Enabled" MouseUp="SetShieldStatusAction"></local:SubOptionItem>
+                    <local:SubOptionItem x:Name="ShieldOff" HorizontalAlignment="Stretch" Width="Auto" Label="Disabled" MouseUp="SetShieldStatusAction"></local:SubOptionItem>
+                    <Button Name="Blocks" Height="40" Grid.Column="1" Margin="20,0,40,0" Width="260" Cursor="Hand" BorderThickness="0" Foreground="#FFFFFF" Background="#0069FF" Content="Dashboard" Click="Dashboard_Click" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Name="AdvancedItems" Visibility="Collapsed" Orientation="Vertical" HorizontalAlignment="Stretch">
+                    <local:MenuItem HorizontalAlignment="Stretch" Icon="/Assets/Images/wrench.png" Width="Auto" Label="Tunnel Configuration" MouseUp="ShowConfig"></local:MenuItem>
+                    <local:MenuItem HorizontalAlignment="Stretch" Icon="/Assets/Images/logs.png" Width="Auto" Label="Service Logs" MouseUp="ShowLogs"></local:MenuItem>
+                    <local:MenuItem HorizontalAlignment="Stretch" Icon="/Assets/Images/logs.png" Width="Auto" Label="Application Logs" MouseUp="ShowUILogs"></local:MenuItem>
+                    <local:MenuItem HorizontalAlignment="Stretch" Icon="/Assets/Images/advanced.png" Width="Auto" Label="Set Logging Level" MouseUp="SetLogLevel"></local:MenuItem>
+                    <local:MenuItem x:Name="ShowReleaseStreamMenuItem" Visibility="Collapsed" HorizontalAlignment="Stretch" Icon="/Assets/Images/update.png" Width="Auto" Label="Set Release Stream" MouseUp="ShowReleaseStreamMenuAction"></local:MenuItem>
+                    <local:MenuItem x:Name="SetAutomaticUpgradeMenuItem" HorizontalAlignment="Stretch" Icon="/Assets/Images/processing.png" Width="Auto" Label="Configure Automatic Upgrades" MouseUp="ShowAutomaticUpgradesMenuAction"></local:MenuItem>
+                    <local:StyledButton x:Name="EditFreqButton" Visibility="Collapsed" OnClick="EditFreqButton_OnClick" Label="Change Notification Frequency" Grid.Row="8" Margin="0,20,0,0"></local:StyledButton>
+                </StackPanel>
+                <StackPanel Name="LogLevelItems" Visibility="Collapsed" Orientation="Vertical" HorizontalAlignment="Stretch">
+                    <local:SubOptionItem x:Name="LogError" HorizontalAlignment="Stretch" Width="Auto" Label="Error" MouseUp="SetLevel"></local:SubOptionItem>
+                    <local:SubOptionItem x:Name="LogWarn" HorizontalAlignment="Stretch" Width="Auto" Label="Warn" MouseUp="SetLevel"></local:SubOptionItem>
+                    <local:SubOptionItem x:Name="LogInfo" HorizontalAlignment="Stretch" Width="Auto" Label="Info" MouseUp="SetLevel"></local:SubOptionItem>
+                    <local:SubOptionItem x:Name="LogDebug" HorizontalAlignment="Stretch" Width="Auto" Label="Debug" MouseUp="SetLevel"></local:SubOptionItem>
+                    <local:SubOptionItem x:Name="LogVerbose" HorizontalAlignment="Stretch" Width="Auto" Label="Verbose" MouseUp="SetLevel"></local:SubOptionItem>
+                    <local:SubOptionItem x:Name="LogTrace" HorizontalAlignment="Stretch" Width="Auto" Label="Trace" MouseUp="SetLevel"></local:SubOptionItem>
+                </StackPanel>
+                <StackPanel Name="ReleaseStreamItems" Visibility="Collapsed" Orientation="Vertical" HorizontalAlignment="Stretch">
+                    <local:SubOptionItem x:Name="ReleaseStreamItemStable" HorizontalAlignment="Stretch" Width="Auto" Label="Stable" MouseUp="SetReleaseStreamMenuAction"></local:SubOptionItem>
+                    <local:SubOptionItem x:Name="ReleaseStreamItemBeta" HorizontalAlignment="Stretch" Width="Auto" Label="Beta" MouseUp="SetReleaseStreamMenuAction"></local:SubOptionItem>
+                    <StackPanel Name="UpdateNowPanel" HorizontalAlignment="Center" Margin="0, 20, 0, 0">
+                        <Button Name="CheckForUpdate" Height="40" Grid.Column="1" Margin="20,0,40,0" Width="260" Cursor="Hand" BorderThickness="0" Foreground="#FFFFFF" Background="#0069FF" Content="Check for Update" Click="CheckForUpdate_Click" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <Label HorizontalAlignment="Center" Name="CheckForUpdateStatus" Content=""></Label>
+
+                        <Button Name="TriggerUpdateButton" Visibility="Collapsed" Height="40" Width="260" Grid.Column="1" Margin="20,0,40,0" Cursor="Hand" BorderThickness="0" Foreground="#FFFFFF" Background="#0069FF" Content="Perform Update" Click="TriggerUpdate_Click" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Name="AutomaticUpgradesItems" Visibility="Collapsed" Orientation="Vertical" HorizontalAlignment="Stretch">
+                    <local:SubOptionItem x:Name="AutomaticUpgradesItemOn" HorizontalAlignment="Stretch" Width="Auto" Label="Enabled" MouseUp="SetAutomaticUpgradesMenuAction"></local:SubOptionItem>
+                    <local:SubOptionItem x:Name="AutomaticUpgradesItemOff" HorizontalAlignment="Stretch" Width="Auto" Label="Disabled" MouseUp="SetAutomaticUpgradesMenuAction"></local:SubOptionItem>
+                </StackPanel>
+                <StackPanel Name="ConfigItems" Visibility="Collapsed" Orientation="Vertical" HorizontalAlignment="Stretch">
+                    <local:MenuEditItem x:Name="ConfigIp" HorizontalAlignment="Stretch" Width="Auto" Label="IPv4 Address:"></local:MenuEditItem>
+                    <local:MenuEditItem x:Name="ConfigSubnet" HorizontalAlignment="Stretch" Width="Auto" Label="Subnet Mask:"></local:MenuEditItem>
+                    <local:MenuEditItem x:Name="ConfigMtu" HorizontalAlignment="Stretch" Width="Auto" Label="MTU:"></local:MenuEditItem>
+                    <local:MenuEditItem x:Name="ConfigDns" HorizontalAlignment="Stretch" Width="Auto" Label="DNS Server:"></local:MenuEditItem>
+                    <local:MenuEditItem x:Name="ConfigPageSize" HorizontalAlignment="Stretch" Width="Auto" Label="Api Page Size (10-500):"></local:MenuEditItem>
+                    <local:MenuEditItem x:Name="ConfigDnsEnabled" HorizontalAlignment="Stretch" Width="Auto" Label="Add Dns:"></local:MenuEditItem>
+                    <local:StyledButton x:Name="EditButton" OnClick="ShowEdit" Label="Edit Values" Grid.Row="8" Margin="0,20,0,0"></local:StyledButton>
+                </StackPanel>
+                <ScrollViewer Name="IdListScrollView" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" CanContentScroll="True" ClipToBounds="True" Visibility="Collapsed">
+                    <StackPanel Name="IdListView" Orientation="Vertical" IsItemsHost="False"></StackPanel>
+                </ScrollViewer>
+                <TextBox Name="LicensesItems" Height="400" Width="{Binding ActualWidth, ElementName=MainStack}" TextWrapping="Wrap" Visibility="Collapsed"></TextBox>
+                <TextBox Name="LogsItems" Height="400" Width="{Binding ActualWidth, ElementName=MainStack}" TextWrapping="Wrap" Visibility="Collapsed" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBox>
+
+                <StackPanel Name="AboutItemsArea" Orientation="Vertical" HorizontalAlignment="Stretch" Visibility="Collapsed">
+                    <Label Name="VersionInfo" HorizontalAlignment="Center" FontSize="10" Height="50" Padding="0,30,0,0" Foreground="#638190" Margin="0,-20,0,0" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"></Label>
+
+                    <Label Name="VersionOlder" Content=" checking version information " HorizontalAlignment="Center" FontSize="10" Height="50" Padding="0,30,0,0" Foreground="#F4044D" Margin="0,-20,0,0" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"></Label>
+                    <Label Name="VersionNewer" Content="" HorizontalAlignment="Center" FontSize="10" Height="50" Padding="0,30,0,0" Foreground="#0069FF" Margin="0,-20,0,0" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"></Label>
+                </StackPanel>
+                <Label Name="MainItemsButton" Margin="0,10,0,0" Foreground="#F4044D" FontWeight="SemiBold" Content="Quit Shield Endpoint" Cursor="Hand" MouseUp="CloseApp" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" HorizontalAlignment="Center"></Label>
+            </StackPanel>
+        </Grid>
+
+        <!-- Modal for Menu Items: Next revision make one global modal -->
+        <Rectangle x:Name="ModalBg" MouseDown="Window_MouseDown" Margin="10,10,10,10" Fill="Black" RadiusY="10" RadiusX="10" Opacity="0" Visibility="Collapsed"></Rectangle>
+
+        <!-- Modal For modifying the config data -->
+        <Grid x:Name="EditArea" Visibility="Collapsed" Height="400" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border Margin="10,10,10,10" BorderBrush="Black" BorderThickness="8" CornerRadius="10">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" Direction="1" RenderingBias="Quality" ShadowDepth="1" Opacity="1"/>
+                </Border.Effect>
+            </Border>
+            <Rectangle Margin="10,10,10,10" RadiusX="10" RadiusY="10" ClipToBounds="True">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="#FFFFFF" Opacity="0.97"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <StackPanel x:Name="DetailPanel" Grid.Column="0" Orientation="Vertical" Margin="20,20,20,20" VerticalAlignment="Center" FocusVisualStyle="{x:Null}">
+
+                <Label Content="IP Address" Padding="10,0,0,0"  FontWeight="Bold" FontSize="14" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="Black"></Label>
+                <TextBox x:Name="ConfigIpNew" Padding="10" Margin="10,10,10,10" Height="40" BorderThickness="1" TextAlignment="Left" FontSize="14" Foreground="Black" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="7"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+
+                <Label Content="Subnet Mask" Padding="10,0,0,0" FontWeight="Bold" FontSize="14" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="Black"></Label>
+                <ComboBox x:Name="ConfigMaskNew" Padding="10" Margin="10,10,10,10" FontSize="14" Height="40" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="Black" BorderBrush="#FFACACAC" Style="{DynamicResource ComboStyle}">
+                    <ComboBoxItem Content="/1 - 128.0.0.0" Tag="1" IsSelected="True"/>
+                    <ComboBoxItem Content="/2 - 192.0.0.0" Tag="2"/>
+                    <ComboBoxItem Content="/3 - 224.0.0.0" Tag="3"/>
+                    <ComboBoxItem Content="/4 - 240.0.0.0" Tag="4"/>
+                    <ComboBoxItem Content="/5 - 248.0.0.0" Tag="5"/>
+                    <ComboBoxItem Content="/6 - 252.0.0.0" Tag="6"/>
+                    <ComboBoxItem Content="/7 - 254.0.0.0" Tag="7"/>
+                    <ComboBoxItem Content="/8 - 255.0.0.0" Tag="8"/>
+                    <ComboBoxItem Content="/9 - 255.128.0.0" Tag="9"/>
+                    <ComboBoxItem Content="/10 - 255.192.0.0" Tag="10"/>
+                    <ComboBoxItem Content="/11 - 255.224.0.0" Tag="11"/>
+                    <ComboBoxItem Content="/12 - 255.240.0.0" Tag="12"/>
+                    <ComboBoxItem Content="/13 - 255.248.0.0" Tag="13"/>
+                    <ComboBoxItem Content="/14 - 255.252.0.0" Tag="14"/>
+                    <ComboBoxItem Content="/15 - 255.254.0.0" Tag="15"/>
+                    <ComboBoxItem Content="/16 - 255.255.0.0" Tag="16"/>
+                    <ComboBoxItem Content="/17 - 255.255.128.0" Tag="17"/>
+                    <ComboBoxItem Content="/18 - 255.255.192.0" Tag="18"/>
+                    <ComboBoxItem Content="/19 - 255.255.224.0" Tag="19"/>
+                    <ComboBoxItem Content="/20 - 255.255.240.0" Tag="20"/>
+                    <ComboBoxItem Content="/21 - 255.255.248.0" Tag="21"/>
+                    <ComboBoxItem Content="/22 - 255.255.252.0" Tag="22"/>
+                    <ComboBoxItem Content="/23 - 255.255.254.0" Tag="23"/>
+                    <ComboBoxItem Content="/24 - 255.255.255.0" Tag="24"/>
+                    <ComboBoxItem Content="/25 - 255.255.255.128" Tag="25"/>
+                    <ComboBoxItem Content="/26 - 255.255.255.192" Tag="26"/>
+                    <ComboBoxItem Content="/27 - 255.255.255.224" Tag="27"/>
+                    <ComboBoxItem Content="/28 - 255.255.255.240" Tag="28"/>
+                    <ComboBoxItem Content="/29 - 255.255.255.248" Tag="29"/>
+                    <ComboBoxItem Content="/30 - 255.255.255.252" Tag="30"/>
+                    <ComboBoxItem Content="/31 - 255.255.255.254" Tag="31"/>
+                    <ComboBoxItem Content="/32 - 255.255.255.255" Tag="32"/>
+                </ComboBox>
+
+                <Label Content="Api Page Size (50-500)" Padding="10,0,0,0"  FontWeight="Bold" FontSize="14" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="Black"></Label>
+                <TextBox x:Name="ConfigePageSizeNew" Padding="10" Margin="10,10,10,10" Height="40" BorderThickness="1" TextAlignment="Left" FontSize="14" Foreground="Black" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" KeyDown="ConfigePageSizeNew_KeyDown" LostFocus="ConfigePageSizeNew_LostFocus">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="7"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+
+                <CheckBox x:Name="AddDnsNew" Content="Add DNS" IsChecked="True" Margin="10"/>
+
+                <local:StyledButton x:Name="SaveConfigButton" OnClick="SaveConfig" Label="Save" Grid.Row="8"></local:StyledButton>
+
+            </StackPanel>
+            <Image Source="/Assets/Images/closeBlack.png" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,40,40,0" Width="10" Height="10" Cursor="Hand" MouseUp="CloseEditConfig"></Image>
+        </Grid>
+
+        <!-- Modal For modifying the notification frequency -->
+        <Grid x:Name="FrequencyArea" Visibility="Collapsed" Height="170" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border Margin="10,10,10,10" BorderBrush="Black" BorderThickness="8" CornerRadius="10">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" Direction="1" RenderingBias="Quality" ShadowDepth="1" Opacity="1"/>
+                </Border.Effect>
+            </Border>
+            <Rectangle Margin="10,10,10,10" RadiusX="10" RadiusY="10" ClipToBounds="True">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="#FFFFFF" Opacity="0.97"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <StackPanel Grid.Column="0" Orientation="Vertical" Margin="20,20,20,20" VerticalAlignment="Center" FocusVisualStyle="{x:Null}">
+
+                <Label Content="Notification Frequency" Padding="10,0,0,0"  FontWeight="Bold" FontSize="14" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="Black"></Label>
+                <TextBox x:Name="Frequency" Padding="10" Margin="10,10,10,10" Height="40" Keyboard.KeyUp="Frequency_KeyUp" BorderThickness="1" TextAlignment="Left" FontSize="14" Foreground="Black" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="7"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+
+                <local:StyledButton x:Name="SaveFrequencyButton" OnClick="SaveFrequencyButton_OnClick" Label="Save" Grid.Row="8"></local:StyledButton>
+
+            </StackPanel>
+            <Image Source="/Assets/Images/closeBlack.png" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,30,30,0" Width="10" Height="10" Cursor="Hand" MouseUp="CloseFrequencyArea"></Image>
+        </Grid>
+    </Grid>
+</UserControl>

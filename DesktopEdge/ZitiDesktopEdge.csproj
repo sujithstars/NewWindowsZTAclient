@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FA4291EA-A97E-4854-959F-91EE7B330B37}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Ziti.Desktop.Edge</RootNamespace>
+    <AssemblyName>ZitiDesktopEdge</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <SupportUrl>https://support.netfoundry.io</SupportUrl>
+    <TargetCulture>en-US</TargetCulture>
+    <ProductName>Ziti Desktop Edge</ProductName>
+    <PublisherName>NetFoundry</PublisherName>
+    <SuiteName>Ziti</SuiteName>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.2.8.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>189AAD422A106DC81E8E79C7E0D2118CEB2E6321</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Releases|AnyCPU'">
+    <OutputPath>bin\Releases\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>IntrusionIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugUpdates|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugUpdates\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Presentation" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WpfMouseWheelLib">
+      <HintPath>..\WpfMouseWheelLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AuthenticationHelper.cs" />
+    <Compile Include="Models\FilterData.cs" />
+    <Compile Include="Models\MessageCount.cs" />
+    <Compile Include="Models\MFA.cs" />
+    <Compile Include="Models\ViewState.cs" />
+    <Compile Include="Utils\ProxyWatchdog.cs" />
+    <Compile Include="Views\Controls\StyledButton.xaml.cs">
+      <DependentUpon>StyledButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ItemRenderers\Filter.xaml.cs">
+      <DependentUpon>Filter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ItemRenderers\MenuEditSearch.xaml.cs">
+      <DependentUpon>MenuEditSearch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ItemRenderers\MenuEditToggle.xaml.cs">
+      <DependentUpon>MenuEditToggle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Screens\Debugging.xaml.cs">
+      <DependentUpon>Debugging.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Screens\IdentityDetails.xaml.cs">
+      <DependentUpon>IdentityDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Screens\MainMenu.xaml.cs">
+      <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UIModel.cs" />
+    <Compile Include="Native\NativeMethods.cs" />
+    <Compile Include="Utils\UIUtils.cs" />
+    <Compile Include="Views\ItemRenderers\MenuEditItem.xaml.cs">
+      <DependentUpon>MenuEditItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ItemRenderers\MenuIdentityItem.xaml.cs">
+      <DependentUpon>MenuIdentityItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ItemRenderers\SubOptionItem.xaml.cs">
+      <DependentUpon>SubOptionItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ItemRenderers\SubMenuItem.xaml.cs">
+      <DependentUpon>SubMenuItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ItemRenderers\MenuItem.xaml.cs">
+      <DependentUpon>MenuItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ZitiIdentity.cs" />
+    <Compile Include="Models\ZitiService.cs" />
+    <Compile Include="Views\Controls\Toggler.xaml.cs">
+      <DependentUpon>Toggler.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Screens\ActivationScreen.xaml.cs">
+      <DependentUpon>ActivationScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Screens\MFAScreen.xaml.cs">
+      <DependentUpon>MFAScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Native\WinAPI.cs" />
+    <Page Include="Views\Controls\StyledButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ItemRenderers\Filter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ItemRenderers\MenuEditSearch.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ItemRenderers\MenuEditToggle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Screens\Debugging.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Screens\IdentityDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ItemRenderers\IdentityItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Screens\MainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\ItemRenderers\IdentityItem.xaml.cs">
+      <DependentUpon>IdentityItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\ItemRenderers\MenuEditItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ItemRenderers\MenuIdentityItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ItemRenderers\SubOptionItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ItemRenderers\SubMenuItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ItemRenderers\MenuItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\Toggler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Screens\ActivationScreen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Screens\MFAScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.manifest" />
+    <None Include="ZitiDesktopEdge-log.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ZitiDesktopEdge_TemporaryKey.pfx" />
+    <Resource Include="Assets\Fonts\open_sans.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\russo_one.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\icon.ico" />
+    <Resource Include="Assets\Images\icon.png" />
+    <Resource Include="Assets\Images\identity.png" />
+    <Resource Include="Assets\Images\jwt.png" />
+    <Resource Include="Assets\Images\loading.png" />
+    <Resource Include="Assets\Images\logo.png" />
+    <Resource Include="Assets\Images\next.png" />
+    <Resource Include="Assets\Images\off.png" />
+    <Resource Include="Assets\Images\offline.png" />
+    <Resource Include="Assets\Images\on.png" />
+    <Resource Include="Assets\Images\online.png" />
+    <Resource Include="Assets\Images\open.png" />
+    <Resource Include="Assets\Images\privacy.png" />
+    <Resource Include="Assets\Images\qr.png" />
+    <Resource Include="Assets\Images\select.png" />
+    <Resource Include="Assets\Images\support.png" />
+    <Resource Include="Assets\Images\up.png" />
+    <Resource Include="Assets\Images\z.png" />
+    <Resource Include="Assets\Images\about.png" />
+    <Resource Include="Assets\Images\advanced.png" />
+    <Resource Include="Assets\Images\appicon.png" />
+    <Resource Include="Assets\Images\back.png" />
+    <Resource Include="Assets\Images\background.png" />
+    <Resource Include="Assets\Images\bubble.png" />
+    <Resource Include="Assets\Images\card.png" />
+    <Resource Include="Assets\Images\close.png" />
+    <Resource Include="Assets\Images\closer.png" />
+    <Resource Include="Assets\Images\connect.png" />
+    <Resource Include="Assets\Images\connected.png" />
+    <Resource Include="Assets\Images\dashboard.png" />
+    <Resource Include="Assets\Images\down.png" />
+    <Resource Include="Assets\Images\feedback.png" />
+    <Resource Include="Assets\Images\globe.png" />
+    <Resource Include="Assets\Images\hamburger.png" />
+    <Resource Include="Assets\Images\header.png" />
+    <Resource Include="Assets\Images\x.png" />
+    <Resource Include="Assets\Images\nextArrow.png" />
+    <Resource Include="Assets\Images\lastArrow.png" />
+    <Resource Include="Assets\Images\logs.png" />
+    <Resource Include="Assets\Images\wrench.png" />
+    <Resource Include="Assets\Images\detach.png" />
+    <Resource Include="Assets\Images\ziti-green.ico" />
+    <Resource Include="Assets\Images\Ziti-Green.png" />
+    <Resource Include="Assets\Images\ziti-red.ico" />
+    <Resource Include="Assets\Images\Ziti-Red.png" />
+    <Resource Include="Assets\Images\ziti-white.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Ziti-White.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ziti.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\server.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\detail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\No_Services.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Success.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZitiDesktopEdge.Client\ZitiDesktopEdge.Client.csproj">
+      <Project>{26b30979-99b5-4102-bd0b-129bedff0057}</Project>
+      <Name>ZitiDesktopEdge.Client</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\identities.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\ErrorBlack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\closeBlack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\WarningRed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\qrcode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\mfaoff.png" />
+    <Resource Include="Assets\Images\mfaon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\recovery.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\disconnected.png" />
+    <Resource Include="Assets\Images\name.png" />
+    <Resource Include="Assets\Images\statusconnected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\timer.png" />
+    <Resource Include="Assets\Images\Ziti-Green-Update.ico" />
+    <Resource Include="Assets\Images\Ziti-Green-Update.png" />
+    <Resource Include="Assets\Images\Ziti-Red-Update.ico" />
+    <Resource Include="Assets\Images\Ziti-Red-Update.png" />
+    <Resource Include="Assets\Images\Ziti-White-Update.ico" />
+    <Resource Include="Assets\Images\Ziti-White-Update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\UpdateWarn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.51.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens">
+      <Version>6.27.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
+      <Version>7.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts">
+      <Version>10.0.22621.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="NLog">
+      <Version>5.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="QRCoder">
+      <Version>1.4.3</Version>
+    </PackageReference>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt">
+      <Version>6.27.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\lockout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\ziti-green-timer.png" />
+    <Resource Include="Assets\Images\ziti-red-timer.png" />
+    <Resource Include="Assets\Images\ziti-white-timer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\ziti-white-mfa.ico" />
+    <Resource Include="Assets\Images\ziti-white-mfa.png" />
+    <Resource Include="Assets\Images\ziti-white-timer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\ziti-red-mfa.ico" />
+    <Resource Include="Assets\Images\ziti-red-mfa.png" />
+    <Resource Include="Assets\Images\ziti-red-timer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\ziti-green-mfa.ico" />
+    <Resource Include="Assets\Images\ziti-green-mfa.png" />
+    <Resource Include="Assets\Images\ziti-green-timer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\processing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\IntrusionIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="IntrusionIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\intrusion_changed.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

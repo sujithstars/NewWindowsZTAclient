@@ -1,0 +1,350 @@
+﻿<Window x:Class="ZitiDesktopEdge.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZitiDesktopEdge"
+        xmlns:debug="clr-namespace:Ziti.Desktop.Edge.Views.Screens"
+        xmlns:i="clr-namespace:Lada.Windows.Input;assembly=WpfMouseWheelLib"
+        mc:Ignorable="d"
+        ShowInTaskbar="False"
+        x:Name="MainUI"
+        Title="Shield Endpoint" Height="640" 
+        Width="420" ResizeMode="NoResize" 
+        MinHeight="500"
+        ClipToBounds="False"
+        Icon="Assets/Images/icon.png" AllowsTransparency="True" 
+        Closing="Window_Closing"
+        i:MouseWheel.Enhanced="True"
+        i:MouseWheel.LogicalScrollDebouncing="Auto"
+        i:MouseWheel.LogicalScrollIncrement="1"
+        i:MouseWheel.ScrollMode="Auto"
+        WindowStyle="None" Loaded="MainWindow_Loaded" Background="#000F0F23"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        >
+    <Window.Resources>
+        <Style TargetType="Image">
+            <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+        </Style>
+        <SolidColorBrush x:Key="ProgressBar.Progress" Color="#FF06B025"/>
+        <SolidColorBrush x:Key="ProgressBar.Background" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="ProgressBar.Border" Color="#FFBCBCBC"/>
+        <Style TargetType="{x:Type ProgressBar}">
+            <Setter Property="Foreground" Value="{StaticResource ProgressBar.Progress}"/>
+            <Setter Property="Background" Value="{StaticResource ProgressBar.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ProgressBar.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Grid x:Name="TemplateRoot">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Determinate"/>
+                                    <VisualState x:Name="Indeterminate">
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="Animation">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <PointAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)" Storyboard.TargetName="Animation">
+                                                <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:2" Value="1.5,0.5"/>
+                                            </PointAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="5" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"/>
+                            <Rectangle x:Name="PART_Track"/>
+                            <Grid x:Name="PART_Indicator" ClipToBounds="true" HorizontalAlignment="Left">
+                                <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}"/>
+                                <Rectangle x:Name="Animation" Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="LayoutTransform" TargetName="TemplateRoot">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsIndeterminate" Value="true">
+                                <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard Name="FormFade">
+                    <DoubleAnimation  Name="FormFadeAnimation" Storyboard.TargetName="MainUI" Storyboard.TargetProperty="(Window.Opacity)" From="0.0" To="1.0" Duration="0:0:0.5" AutoReverse="False" RepeatBehavior="1x" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Window.Unloaded">
+            <BeginStoryboard>
+                <Storyboard Name="FormFadeOut" Completed="FormFadeOut_Completed">
+                    <DoubleAnimation Name="FormFadeOutAnimation" Storyboard.TargetName="MainUI" Storyboard.TargetProperty="(Window.Opacity)" From="1.0" To="0.0" Duration="0:0:0.5" AutoReverse="False"  RepeatBehavior="1x" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid x:Name="MainGrid" Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Canvas x:Name="ArrowCanvas" ClipToBounds="False">
+            <Rectangle x:Name="Arrow" HorizontalAlignment="Center" Height="20" Fill="#070826" Width="20" ClipToBounds="True" Canvas.Left="185" Canvas.Bottom="-10">
+                <Rectangle.LayoutTransform>
+                    <RotateTransform Angle="-45"/>
+                </Rectangle.LayoutTransform>
+            </Rectangle>
+        </Canvas>
+        <Border Margin="10,10,10,10" Name="UIBorder" BorderBrush="Black" BorderThickness="8" CornerRadius="10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" Direction="1" RenderingBias="Quality" ShadowDepth="1" Opacity="1"/>
+            </Border.Effect>
+        </Border>
+        <Rectangle Margin="10,10,10,10" Name="BgColor" Stroke="Black" RadiusY="10" RadiusX="10" ClipToBounds="True">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="/Assets/Images/background.png" />
+            </Rectangle.Fill>
+        </Rectangle>
+        <StackPanel x:Name="MainView" Margin="10,10,10,-20">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Cursor="Hand" Orientation="Vertical" Margin="14,16,14,14" MouseLeftButtonUp="ShowMenu">
+                    <Image Source="/Assets/Images/hamburger.png" Margin="5,0,0,-4" Width="26" Height="26" HorizontalAlignment="Left"></Image>
+                    <Label Content="MAIN" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="White" Height="25" FontSize="10"></Label>
+                    <Label Content="MENU" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="White" Height="25" Margin="0,-14,0,0" FontSize="10"></Label>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,12" MouseDown="Window_MouseDown">
+                    <Image Source="/Assets/Images/z.png" Height="40" RenderOptions.BitmapScalingMode="Fant"></Image>
+                    <Grid>
+                        <Label Name="ConnectedTime" HorizontalAlignment="Center" Content="00:00:00" Foreground="White"/>
+                    </Grid>
+                </StackPanel>
+                <StackPanel x:Name="AddIdAreaButton" Grid.Column="2" Cursor="Hand" Orientation="Vertical" Margin="14,16,14,14" MouseLeftButtonUp="OpenIdentityChoice">
+                    <Image Source="/Assets/Images/identity.png" Margin="0,0,5,-4" Width="26" Height="26" HorizontalAlignment="Right"></Image>
+                    <Label Content="ADD" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="White" Height="25" FontSize="10" HorizontalAlignment="Right"></Label>
+                    <Label Content="IDENTITY" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="White" Height="25" Margin="0,-14,0,0" FontSize="10" HorizontalAlignment="Right"></Label>
+                </StackPanel>
+            </Grid>
+            <Canvas Name="ConnectButton" Width="400" Height="250" MouseUp="StartZitiService" Visibility="Collapsed">
+                <StackPanel Width="{Binding ActualWidth, ElementName=ConnectButton}" VerticalAlignment="Top" Orientation="Vertical">
+                    <!--<Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>-->
+                    <Image Source="/Assets/Images/connect.png" Height="140" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20"/>
+                    <TextBlock Text="Click to Connect" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="20" Foreground="White"/>
+                </StackPanel>
+            </Canvas>
+            <Canvas VerticalAlignment="Stretch" Name="DisconnectButton" Width="400" Height="200" MouseUp="Disconnect" Visibility="Collapsed">
+                <StackPanel Width="{Binding ActualWidth, ElementName=DisconnectButton}" VerticalAlignment="Top" Orientation="Vertical">
+                    <Image Source="/Assets/Images/connected.png" Height="140" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="Click to Disconnect" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="20" Foreground="White"/>
+                </StackPanel>
+            </Canvas>
+            <Button x:Name="ActivationButton" Width="200" Height="30" Background="Yellow" Content="Activate" HorizontalAlignment="Center" Margin="0,0,0,20" Click="DashboardButton_Click" />
+
+            <ScrollViewer Name="IdListScroller" MinHeight="60" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}" CanContentScroll="True" ClipToBounds="True" PanningMode="VerticalOnly" PanningRatio=".1">
+                <StackPanel Name="IdList" Orientation="Vertical" IsItemsHost="False" LayoutUpdated="IdList_LayoutUpdated" FocusVisualStyle="{x:Null}"></StackPanel>
+            </ScrollViewer>
+            <Grid HorizontalAlignment="Center" Margin="0,0,0,20" Width="Auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Name="AddIdButton" Padding="0,0,0,20" Grid.Column="0" Margin="0,0,10,0" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="#FFFFFF" FontSize="16" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center" MouseDown="OpenIdentityChoice"/>
+                <!--<Label Name="AddIdViaAADButton" Padding="0,0,0,20" Grid.Column="1" Margin="10,0,0,0" Content="Add Identity via AAD" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="#FFFFFF" FontSize="16" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center" MouseDown="AddIdentityViaAAD"/>-->
+            </Grid>
+        </StackPanel>
+        <Canvas x:Name="AlertCanvas" ClipToBounds="False" Visibility="Collapsed">
+            <Image Source="/Assets/Images/UpdateWarn.png" Canvas.Left="50" Canvas.Top="32" Width="14" Height="14"></Image>
+        </Canvas>
+        <!-- Form for debugging -->
+        <debug:Debugging x:Name="DebugForm" Visibility="Collapsed" />
+        <!-- Menu UI -->
+        <local:MainMenu x:Name="MainMenu" Visibility="Collapsed"></local:MainMenu>
+        <!-- ID Detail UI -->
+        <local:IdentityDetails x:Name="IdentityMenu" Visibility="Collapsed" OnMFAToggled="MFAToggled" Authenticate="ShowAuthenticate" Recovery="ShowRecovery" OnLoading="DoLoading" OnShowMFA="ShowAuthenticate"></local:IdentityDetails>
+
+        <!-- Modal Background -->
+        <Rectangle x:Name="ModalBg" MouseDown="Window_MouseDown" Margin="10,10,10,10" Fill="Black" RadiusY="10" RadiusX="10" Opacity="0" Visibility="Collapsed"></Rectangle>
+        <!-- MFA Setup Prompt -->
+        <local:MFAScreen x:Name="MFASetup" Visibility="Collapsed" Margin="0,0,0,0" OnClose="DoClose"></local:MFAScreen>
+        <!-- Activation Screen -->
+        <local:ActivationScreen x:Name="ActivationScreen" Visibility="Collapsed" Margin="0,0,0,0" OnClose="DoActivateClose" ></local:ActivationScreen>
+
+        <!-- Small messages screen that opens at the bottom -->
+        <Grid x:Name="BlurbArea" Visibility="Collapsed" Height="80" Margin="0,500,0,0" VerticalAlignment="Bottom">
+            <Border Margin="10,10,10,10" BorderBrush="Black" BorderThickness="8" CornerRadius="10">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" Direction="1" RenderingBias="Quality" ShadowDepth="1" Opacity="1"/>
+                </Border.Effect>
+            </Border>
+            <Rectangle Margin="10,10,10,10" RadiusX="10" RadiusY="10" ClipToBounds="True">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="#FFFFFF" Opacity="0.97"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid Margin="30,0,30,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Image x:Name="RedBlurb" Source="/Assets/Images/WarningRed.png" Grid.Column="0" Width="30" Grid.Row="1" Height="30" Margin="0,0,0,0"></Image>
+                <Image x:Name="InfoBlurb" Visibility="Collapsed" Source="/Assets/Images/Warning.png" Grid.Column="0" Width="30" Grid.Row="1" Height="30" Margin="0,0,0,0"></Image>
+                <Label x:Name="Blurb" Content="An Update is available!" MouseUp="BlurbAction" Grid.Column="1" Padding="0,0,0,0" Grid.Row="1" Margin="0,0,0,0" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="#000000" FontSize="12" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+                <Image Source="/Assets/Images/closeBlack.png" Grid.Column="2" Width="10" Height="10" Grid.Row="1" Margin="0,0,0,0" Cursor="Hand" MouseUp="DoHideBlurb"></Image>
+            </Grid> 
+        </Grid>
+
+        <Grid x:Name="NoServiceView" Visibility="Collapsed" Margin="10,10,10,10">
+            <Rectangle RadiusX="10" RadiusY="10">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="Black" Opacity="0.9"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label x:Name="ErrorMsg" Foreground="White" Content="Service Not Started" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"/>
+                <Label x:Name="ErrorMsgDetail" Foreground="LightGray" Content="Start the Ziti Tunnel Service to get started" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"/>
+
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="CloseErrorButton" Grid.Column="0" Margin="40,0,20,0" Cursor="Hand" BorderThickness="0" Foreground="#FFFFFF" Background="#0068f9" Content="Close Error" Click="CloseError" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    <Button x:Name="QuitButton" Grid.Column="1" Margin="20,0,40,0" Cursor="Hand" BorderThickness="0" Foreground="#FFFFFF" Background="#F4044D" Content="Quit App" Click="CloseApp" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="LoadingScreen" MouseDown="Window_MouseDown" Visibility="Collapsed" Margin="10,10,10,10">
+            <Rectangle RadiusX="10" RadiusY="10">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="Black" Opacity="0.9"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+            </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="10"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label x:Name="LoadingTitle" Foreground="White" Content="Loading" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"/>
+                <TextBlock x:Name="LoadingDetails" TextWrapping="WrapWithOverflow" Foreground="LightGray" Padding="10" Text="${x:DefaultLoadText}" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" FontSize="14" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"/>
+                <ProgressBar x:Name="LoadProgress" Width="100" Grid.Row="3" IsEnabled="True" />
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="ErrorView" MouseDown="Window_MouseDown" Visibility="Collapsed" Margin="10,10,10,10">
+            <Rectangle RadiusX="10" RadiusY="10">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="Black" Opacity="0.9"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+            </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="120"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="30"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Name="ErrorTitle" Foreground="White" Content="An Error Occurred" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"/>
+                <TextBlock x:Name="ErrorDetails" TextWrapping="WrapWithOverflow" Width="400" Foreground="LightGray" Padding="10" Text="An Unknown Error Occurred, you could try restarting the service and the interface to continue" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" FontSize="14" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans"/>
+                <Label Grid.Row="3" Foreground="Gray" FontWeight="Light" Content="Check the Log for Details" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" HorizontalAlignment="Center"></Label>
+
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="40,0,20,0" Cursor="Hand" BorderThickness="0" Foreground="#FFFFFF" Background="#0068f9" Content="Close Error" Click="CloseError" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    <Button Grid.Column="1" Margin="20,0,40,0" Cursor="Hand" BorderThickness="0" Foreground="#FFFFFF" Background="#F4044D" Content="Quit App" Click="CloseApp" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+    <Window.InputBindings>
+        <KeyBinding x:Name="ShowDebug" Command="{Binding SomeCommand}" Key="F12" />
+    </Window.InputBindings>
+</Window>
