@@ -175,6 +175,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="ziti.ico" />
+    <None Include="bin\Debug\App.config" />
+    <None Include="bin\Debug\ZitiUpdateService-log.config" />
+    <None Include="bin\Debug\ZitiUpdateService.exe.config" />
     <None Include="ZitiUpdateService-log.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -190,6 +193,37 @@
   <ItemGroup>
     <Resource Include="ziti-green.ico" />
     <EmbeddedResource Include="checkers\PeFile\openziti.rootCA.rsa.pem.txt" />
+    <Content Include="bin\Debug\DnsClient.dll" />
+    <Content Include="bin\Debug\DnsClient.xml" />
+    <Content Include="bin\Debug\Microsoft.Management.Infrastructure.dll" />
+    <Content Include="bin\Debug\Microsoft.Win32.Registry.dll" />
+    <Content Include="bin\Debug\Microsoft.Win32.Registry.xml" />
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
+    <Content Include="bin\Debug\NLog.dll" />
+    <Content Include="bin\Debug\NLog.xml" />
+    <Content Include="bin\Debug\System.Buffers.dll" />
+    <Content Include="bin\Debug\System.Buffers.xml" />
+    <Content Include="bin\Debug\System.Management.Automation.dll" />
+    <Content Include="bin\Debug\System.Management.Automation.xml" />
+    <Content Include="bin\Debug\System.Memory.dll" />
+    <Content Include="bin\Debug\System.Memory.xml" />
+    <Content Include="bin\Debug\System.Numerics.Vectors.dll" />
+    <Content Include="bin\Debug\System.Numerics.Vectors.xml" />
+    <Content Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.dll" />
+    <Content Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.xml" />
+    <Content Include="bin\Debug\System.Security.AccessControl.dll" />
+    <Content Include="bin\Debug\System.Security.AccessControl.xml" />
+    <Content Include="bin\Debug\System.Security.Cryptography.Pkcs.dll" />
+    <Content Include="bin\Debug\System.Security.Cryptography.Pkcs.xml" />
+    <Content Include="bin\Debug\System.Security.Principal.Windows.dll" />
+    <Content Include="bin\Debug\System.Security.Principal.Windows.xml" />
+    <Content Include="bin\Debug\System.ValueTuple.dll" />
+    <Content Include="bin\Debug\System.ValueTuple.xml" />
+    <Content Include="bin\Debug\ZitiDesktopEdge.Client.dll" />
+    <Content Include="bin\Debug\ZitiDesktopEdge.Client.pdb" />
+    <Content Include="bin\Debug\ZitiUpdateService.exe" />
+    <Content Include="bin\Debug\ZitiUpdateService.pdb" />
     <Content Include="ziti-white.ico" />
   </ItemGroup>
   <ItemGroup>

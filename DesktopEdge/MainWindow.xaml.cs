@@ -47,6 +47,12 @@ using System.Text.RegularExpressions;
 using System.Net.Sockets;
 using System.Security.Principal;
 using Ziti.Desktop.Edge.Utils;
+using System.Windows.Resources;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
+
 
 namespace ZitiDesktopEdge {
 
@@ -71,8 +77,13 @@ namespace ZitiDesktopEdge {
 		public string CurrentIcon = "white";
 		private string[] suffixes = { "Bps", "kBps", "mBps", "gBps", "tBps", "pBps" };
 		private string _blurbUrl = "";
-        const string testingEndpoint = "https://j8w70hi9q1.execute-api.us-east-1.amazonaws.com/beta/";
-		const string testingAPIKey = "EŖȞ͐юզـݑࠕ५ਬତపൟ๿ཨၜᅦቚ፣ᑮᔫᘦ᝼᡽᤼ᩜ᭎᰹ᴺḾὓⁿ⅟≜⍨⑭╄♻❤";
+	//const string testingEndpoint = "https://j8w70hi9q1.execute-api.us-east-1.amazonaws.com/beta/";
+        const string testingEndpoint = "https://endpointregistration.cloud.intrusion.com/endpoints";
+        private MainWindow mainWindow;
+        public delegate void CloseAction(bool isComplete);
+        public event CloseAction OnClose;
+
+        const string testingAPIKey = "EŖȞ͐юզـݑࠕ५ਬତపൟ๿ཨၜᅦቚ፣ᑮᔫᘦ᝼᡽᤼ᩜ᭎᰹ᴺḾὓⁿ⅟≜⍨⑭╄♻❤";
 
         private CancellationTokenSource cancellationActivationToken;
 
@@ -88,7 +99,8 @@ namespace ZitiDesktopEdge {
 
 		private static ZDEWViewState state;
 		static MainWindow() {
-			asm = System.Reflection.Assembly.GetExecutingAssembly();
+            
+            asm = System.Reflection.Assembly.GetExecutingAssembly();
 			ThisAssemblyName = asm.GetName().Name;
 			state = (ZDEWViewState)Application.Current.Properties["ZDEWViewState"];
 #if DEBUG
@@ -101,11 +113,22 @@ namespace ZitiDesktopEdge {
 			ExpectedLogPathUI = Path.Combine(ExpectedLogPathRoot, "UI", $"{ThisAssemblyName}.log");
 			ExpectedLogPathServices = Path.Combine(ExpectedLogPathRoot, "service", $"ziti-tunneler.log");
 
-			Console.WriteLine("Launching DNS Proxy");
-			RunProxy();
-        }
+            MainWindow mainWindow = new MainWindow();
+			//mainWindow.StartZitiServiceWrapper();
+			//MonitorClient monitor = new MonitorClient("");
+            //var r = monitor.StartServiceAsync();
+            Console.WriteLine("Launching DNS Proxy");
+            RunProxy();
 
-		private static void RunProxy()
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "IntrusionApplication");
+            Directory.CreateDirectory(appDataPath);  // Create the folder if it doesn't exist
+
+            // Save data to a file
+            string filePath = Path.Combine(appDataPath, "settings.json");
+            //File.WriteAllText(filePath, myDataAsJson);
+		        }
+        
+        private static void RunProxy()
 		{
 			Process process = new Process();
 
@@ -127,6 +150,8 @@ namespace ZitiDesktopEdge {
 			process.Close();
 		}
 
+		
+
 		async private void IdentityMenu_OnMessage(string message) {
 			await ShowBlurbAsync(message, "");
 		}
@@ -134,18 +159,18 @@ namespace ZitiDesktopEdge {
 		private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e) {
 			LoadIdentities(true);
 		}
-
 		private List<ZitiIdentity> identities {
 			get {
 				return (List<ZitiIdentity>)Application.Current.Properties["Identities"];
 			}
 		}
 
-		/// <summary>
-		/// The MFA Toggle was toggled
-		/// </summary>
-		/// <param name="isOn">True if the toggle was on</param>
-		private async void MFAToggled(bool isOn) {
+        
+        /// <summary>
+        /// The MFA Toggle was toggled
+        /// </summary>
+        /// <param name="isOn">True if the toggle was on</param>
+        private async void MFAToggled(bool isOn) {
 			if (isOn) {
 				ShowLoad("Generating MFA", "MFA Setup Commencing, please wait");
 
@@ -407,16 +432,274 @@ namespace ZitiDesktopEdge {
 			}
 			semaphoreSlim.Release();
 		}
-
-        private void DashboardButton_Click(object sender, RoutedEventArgs e)
-        {
+        private async void Login_Click(object sender, RoutedEventArgs e)
+		{
+            var r = await monitorClient.StartServiceAsync();
             var button = sender as Button;
+            logger.Info("Getting the user's work domain...");
+
+            var emailDomain = await GetEmailDomain();
+
+            if (emailDomain is null)
+            {
+                logger.Warn("This computer is not associated with any Active Directory.");
+                logger.Info("Showing message box...");
+                //MessageBox.Show("This computer is not associated with any Active Directory.");
+                return;
+            }
+
+            logger.Info("Encoding domain JWT...");
+            var domainJWT = EncodeDomainJWT(emailDomain);
+
+            logger.Info("Sending domain JWT to API to get config...");
+            var configString = await SendDomainToken(domainJWT, testingEndpoint , testingAPIKey);
+
+			if (configString is null)
+			{
+				return;
+			}
+
+			if (configString.Contains("404"))
+			{
+				logger.Error("Your workplace's domain isn't registered with Intrusion\nPlease contact your system administrator");
+				//MessageBox.Show("Your workplace's domain isn't registered with Intrusion\nPlease contact your system administrator");
+				return;
+			}
+
+			//logger.Info("Config received: " + configString);
+			//MessageBox.Show("Config received: " + configString);
+
+			JObject configJson = JsonConvert.DeserializeObject<JObject>(configString);
+			string encodedConfig = (string)configJson["jwt"];
+
+            // Create a new instance of JwtSecurityTokenHandler
+            var handler = new JwtSecurityTokenHandler();
+
+            // Read and decode the JWT
+            var jsonToken = handler.ReadToken(encodedConfig);
+            var decodedJwt = jsonToken as JwtSecurityToken;
+
+            // Access the JWT's claims
+            string dom = decodedJwt.Claims.FirstOrDefault(claim => claim.Type == "dom")?.Value;
+            // Base64url to Base64
+            string base64 = dom.Replace('-', '+').Replace('_', '/');
+
+            // Base64 to bytes
+            byte[] bytes = Convert.FromBase64String(base64);
+
+            // Bytes to string
+            string json = System.Text.Encoding.UTF8.GetString(bytes);
+
+            // Parse JSON string to object
+            configJson = JsonConvert.DeserializeObject<JObject>(json);
+
+            // Narrow down the results to just the key that contains the AAD config JSON
+            JObject aadConfig = configJson.Value<JObject>("aad_configuration");
+
+            logger.Info("Getting work account info...");
+            //MessageBox.Show("Getting work account info...");
+
+            var accountInfo = GetWorkAccountInfo();
+            if (accountInfo == null || !(bool)accountInfo["WorkplaceJoined"])
+            {
+                logger.Warn("Showing message box...");
+                MessageBox.Show("This computer is not associated with any Active Directory.");
+                return;
+            }
+
+            // Start the Microsot SSO
+            logger.Info("Starting Microsoft SSO...");
+            AuthenticationHelper authHelper;
+            string clientId = "";
+            string authority;
+            string[] scopes;
+            string accessToken = "";
+            try
+            {
+                authHelper = new AuthenticationHelper();
+                clientId = (string)aadConfig["client_id"];
+                authority = $"https://login.microsoftonline.com/{aadConfig["tenant_id"]}";
+                //MessageBox.Show("Received scopes: " + aadConfig["scopes"]);
+                //MessageBox.Show("Authority: " + authority + "\nclient ID: " + clientId);
+
+                //var arr = (JArray)aadConfig["scopes"];
+                //scopes = new string[arr.Count];
+
+                //for (int i = 0; i < arr.Count; i++)
+                //{
+                //    scopes[i] = arr[i].ToString().Replace("User.ReadBasic.All", "User.Read.All").Replace(" ", "");
+                //}
+
+
+                scopes = new string[] { "Device.Read.All", "User.Read" };
+
+                //MessageBox.Show("Processed scopes: " + string.Join(",", scopes));
+
+                accessToken = await authHelper.AcquireAccessTokenAsync(clientId, authority, scopes);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("Exception while starting SSO: " + ex.ToString());
+                return;
+            }
+            ShowLoad("Adding Identity", "Please wait while the identity is added");
+            logger.Info("Authentication success.");
+            logger.Info("Getting UPN...");
+            //MessageBox.Show("Getting UPN...");
+            var upn = await GetUPN(accessToken);
+           // logger.Info("UPN received: " + upn);
+            //MessageBox.Show("UPN received: " + upn);
+            logger.Info("Getting Owned Devices list...");
+            //MessageBox.Show("Getting Owned Devices list...");
+            var devicesList = await GetOwnedDevices(accessToken);
+
+            Dictionary<string, object> foundDevice = null;
+            if (devicesList.Count == 0)
+            {
+                logger.Error("No devices found.");
+                MessageBox.Show("Your Azure Active Directory account has no devices associated with it.");
+                return;
+            }
+            else
+            {
+                // Run through the list of user's owned devices to find the one running the client
+                foreach (var device in devicesList)
+                {
+                    if (device["deviceId"].Equals(accountInfo["WorkplaceDeviceId"]))
+                    {
+                        logger.Info("Device match found.");
+                        foundDevice = device;
+                        break;
+                    }
+                }
+            }
+
+            if (foundDevice == null)
+            {
+                logger.Error("No device match found.");
+                MessageBox.Show("No matching devices were found in your AAD account for this device.");
+                return;
+            }
+
+            // Get external IP
+            logger.Info("Getting external IP...");
+            //MessageBox.Show("Getting external IP...");
+            var ip = await GetCurrentExternalIPAsync();
+            if (ip is null)
+            {
+                logger.Error("IP returned is null. API could be down, or no internet connection");
+                MessageBox.Show("Unable to get your external IP.\nDo you have a working internet connection?");
+                return;
+            }
+            logger.Info("External IP: " + ip);
+            //MessageBox.Show("External IP: " + ip);
+
+            string deviceID = (string)accountInfo["WorkplaceDeviceId"];
+            string username = upn;
+            string sourceIP = ip;
+            string objectID = (string)foundDevice["id"];
+            int expiryTime = 300;
+
+            //MessageBox.Show("Encoding endpoint JWT token");
+            string jwtToken = EncodeEndpointJwtToken(deviceID, username, sourceIP, objectID, expiryTime);
+
+            logger.Info("Sending token to provisioning API...");
+            //MessageBox.Show("Sending token to provisioning API...");
+            //"https://endpointregistration.cloud.intrusion.com/"
+           var response = await SendToken(jwtToken, testingEndpoint + "endpoints", accessToken, testingAPIKey, deviceID);
+           //var response = await SendToken(jwtToken, "https://endpointregistration.cloud.intrusion.com/endpoints", accessToken, testingAPIKey, deviceID);
+
+            if (response == null)
+            {
+                logger.Error("No or invalid response from API. Closing load screen.");
+                HideLoad();
+                return;
+            }
+
+            logger.Info("Received JSON: " + response.ToString());
+            //MessageBox.Show("Received JSON: " + response.ToString());
+
+            // Deserialize the string into a JObject
+            JObject jsonObject = JsonConvert.DeserializeObject<JObject>(response);
+            string jwt = (string)jsonObject["jwt"];
+
+            // TODO: Avoid creating a useless JWT file and send the response data directly to the AddIdentity
+
+            // We currently have to write the received JWT to a file and import that using the normal AddIdentity option
+            // The file is placed in the user's Documents folder, and deleted once it's used
+
+            // Write received JWT to file
+            string downloadsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
+            string fileName = Path.Combine(downloadsFolder, "AAD.jwt");
+            try
+            {
+                File.WriteAllText(fileName, jwt);
+                logger.Info("Written to " + fileName);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("Error while writing file: " + ex.ToString());
+                MessageBox.Show("Error while writing file: " + ex.ToString());
+                return;
+            }
+
+            string fileContent = File.ReadAllText(fileName);
+            logger.Info($"File Content:\n{fileContent}");
+
+            try
+            {
+                logger.Info("Importing identity...");
+                //MessageBox.Show("Importing identity");
+                Identity createdId = await serviceClient.AddIdentityAsync(Path.GetFileName(fileName), false, fileContent);
+
+                if (createdId != null)
+                {
+                    logger.Info("Importing identity: " + createdId.ToString());
+                    var zid = ZitiIdentity.FromClient(createdId);
+                    AddIdentity(zid);
+                    LoadIdentities(true);
+                    await serviceClient.IdentityOnOffAsync(createdId.Identifier, true);
+                }
+            }
+            catch (ServiceException se)
+            {
+                logger.Error(se.ToString());
+                ShowError(se.Message, se.AdditionalInfo);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex.ToString());
+                ShowError("Unexpected Error", "Code 2: " + ex.Message);
+            }
+            HideLoad();
+            logger.Info("Deleting file: " + fileName);
+            File.Delete(fileName);
+
+
+            
+
+
+
+
+        }
+		private void DashboardButton_Click(object sender, RoutedEventArgs e)
+		{
+			// string exePath = Assembly.GetExecutingAssembly().Location;          
+			//string rootFolderPath = System.IO.Path.GetDirectoryName(exePath);
+			//string filePath = System.IO.Path.Combine(rootFolderPath, "File.json");
+			//if (File.Exists(filePath))
+			//{
+			//  ActivationScreen.showActivation(this);
+			//ActivationScreen.DoActivation();
+			//return;
+			//}
+			var button = sender as Button;
 			if ((String)(button.Content) == "Shield Dashboard")
 			{
 				System.Diagnostics.Process.Start("http://127.0.0.1:8001/");
 			}
 			else if ((String)(button.Content) == "Shield Unavailable")
-            {
+			{
 				ActivationScreen.Opacity = 0;
 				ActivationScreen.Visibility = Visibility.Visible;
 				ActivationScreen.Margin = new Thickness(0, 0, 0, 0);
@@ -429,23 +712,23 @@ namespace ZitiDesktopEdge {
 				ActivationScreen.showActivation(this);
 				ShowModal();
 			}
-            else if ((String)(button.Content) == "Activate")
-            {
-                ActivationScreen.Opacity = 0;
-                ActivationScreen.Visibility = Visibility.Visible;
-                ActivationScreen.Margin = new Thickness(0, 0, 0, 0);
-                ActivationScreen.BeginAnimation(Grid.OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.3)));
-                ActivationScreen.BeginAnimation(Grid.MarginProperty, new ThicknessAnimation(new Thickness(30, 30, 30, 30), TimeSpan.FromSeconds(.3)));
-                ActivationScreen.ActivationBrush.Visibility = Visibility.Visible;
-                ActivationScreen.ActivationArea.Visibility = Visibility.Visible;
-                ActivationScreen.customerKey.Focus();
-                ActivationScreen.Close.Visibility = Visibility.Visible;
-                ActivationScreen.showActivation(this);
-                ShowModal();
-            }
-        }
+			else if ((String)(button.Content) == "Activate")
+			{
+				ActivationScreen.Opacity = 0;
+				ActivationScreen.Visibility = Visibility.Visible;
+				ActivationScreen.Margin = new Thickness(0, 0, 0, 0);
+				ActivationScreen.BeginAnimation(Grid.OpacityProperty, new DoubleAnimation(1, TimeSpan.FromSeconds(.3)));
+				ActivationScreen.BeginAnimation(Grid.MarginProperty, new ThicknessAnimation(new Thickness(30, 30, 30, 30), TimeSpan.FromSeconds(.3)));
+				ActivationScreen.ActivationBrush.Visibility = Visibility.Visible;
+				ActivationScreen.ActivationArea.Visibility = Visibility.Visible;
+				ActivationScreen.customerKey.Focus();
+				ActivationScreen.Close.Visibility = Visibility.Visible;
+				ActivationScreen.showActivation(this);
+				ShowModal();
+			}
+		}
 
-        private void DoActivateClose(bool isComplete)
+		private void DoActivateClose(bool isComplete)
         {
             DoubleAnimation animation = new DoubleAnimation(0, TimeSpan.FromSeconds(.3));
             ThicknessAnimation animateThick = new ThicknessAnimation(new Thickness(0, 0, 0, 0), TimeSpan.FromSeconds(.3));
@@ -486,15 +769,15 @@ namespace ZitiDesktopEdge {
         {
             if (ProxyWatchdog.Shared.IsRegistered)
             {
-                MainUI.ActivationButton.Content = "Shield Dashboard";
+                //MainUI.ActivationButton.Content = "Shield Dashboard";
             }
             else if (!ProxyWatchdog.Shared.IsRegistered && ProxyWatchdog.Shared.IsRunning)
             {
-                MainUI.ActivationButton.Content = "Activate Shield";
+                //MainUI.ActivationButton.Content = "Activate Shield";
             }
             else 
             {
-                MainUI.ActivationButton.Content = "Shield Unavailable";
+                //MainUI.ActivationButton.Content = "Shield Unavailable";
             }
         }
 
@@ -508,7 +791,22 @@ namespace ZitiDesktopEdge {
 		private System.Windows.Forms.MenuItem contextMenuItem;
 		private System.ComponentModel.IContainer components;
 		public MainWindow() {
-			InitializeComponent();
+			
+            //this.ActivationScreen.DoActivation();
+            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (rkApp.GetValue("StartupWithWindows") == null)
+            {
+                // The value doesn't exist, the application is not set to run at startup, Check box
+               // chkRun.IsChecked = false;
+                //lblInfo.Content = "The application doesn't run at startup";
+            }
+            else
+            {
+                // The value exists, the application is set to run at startup
+               // chkRun.IsChecked = true;
+                ///lblInfo.Content = "The application runs at startup";
+            }
+            InitializeComponent();
 			SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
 			string nlogFile = Path.Combine(ExecutionDirectory, ThisAssemblyName + "-log.config");
 
@@ -585,6 +883,7 @@ namespace ZitiDesktopEdge {
 
             this.cancellationActivationToken = new CancellationTokenSource();
             StartUpdateActivationButtonLoop(cancellationActivationToken.Token);
+
         }
 
 		async private void MFASetup_OnError(string message) {
@@ -773,6 +1072,7 @@ namespace ZitiDesktopEdge {
 			monitorClient.OnCommunicationError += MonitorClient_OnCommunicationError;
             monitorClient.OnReconnectFailure += MonitorClient_OnReconnectFailure;
 			Application.Current.Properties.Add("MonitorClient", monitorClient);
+
 
 			Application.Current.Properties.Add("Identities", new List<ZitiIdentity>());
 			MainMenu.OnAttachmentChange += AttachmentChanged;
@@ -1075,11 +1375,16 @@ namespace ZitiDesktopEdge {
 				SetCantDisplay("The Service Is Still Running", "Current status is: " + status.Status, Visibility.Visible);
 			}
 		}
-
-		async private void StartZitiService(object sender, RoutedEventArgs e) {
+        async private void StartZitiServiceWrapper()
+        {
+            // Call the original method with default values for sender and e
+            // StartZitiService(this, null);
+        }
+        async private void StartZitiService(object sender, RoutedEventArgs e) {
 			try {
 				ShowLoad("Starting", "Starting the data service");
 				logger.Info("StartZitiService");
+				
 				var r = await monitorClient.StartServiceAsync();
 				if (r.Code != 0) {
 					logger.Debug("ERROR: {0} : {1}", r.Message, r.Error);
@@ -1546,7 +1851,7 @@ namespace ZitiDesktopEdge {
 				if (isConnected) {
 					ConnectButton.Visibility = Visibility.Collapsed;
 					DisconnectButton.Visibility = Visibility.Visible;
-                    ConnectedTime.Visibility = Visibility.Visible;
+                    //ConnectedTime.Visibility = Visibility.Visible;
                     MainMenu.Connected();
 					HideLoad();
 				} else {
@@ -1554,7 +1859,7 @@ namespace ZitiDesktopEdge {
 					DisconnectButton.Visibility = Visibility.Collapsed;
 					IdentityMenu.Visibility = Visibility.Collapsed;
 					MainMenu.Visibility = Visibility.Collapsed;
-					ConnectedTime.Visibility = Visibility.Collapsed;
+					//ConnectedTime.Visibility = Visibility.Collapsed;
                     HideBlurb();
 					MainMenu.Disconnected();
 				}
@@ -1805,7 +2110,7 @@ namespace ZitiDesktopEdge {
 			var domainJWT = EncodeDomainJWT(emailDomain);
 
 			logger.Info("Sending domain JWT to API to get config...");
-			var configString = await SendDomainToken(domainJWT, testingEndpoint + "domains", testingAPIKey);
+			var configString = await SendDomainToken(domainJWT, testingEndpoint , testingAPIKey);
 
 			if (configString is null)
 			{
@@ -1958,6 +2263,7 @@ namespace ZitiDesktopEdge {
 
             logger.Info("Sending token to provisioning API...");
             //MessageBox.Show("Sending token to provisioning API...");
+
             var response = await SendToken(jwtToken, testingEndpoint + "endpoints", accessToken, testingAPIKey, deviceID);
 
             if (response == null)
@@ -2629,7 +2935,7 @@ namespace ZitiDesktopEdge {
 			var hoursString = (hours > 9) ? hours.ToString() : "0" + hours;
 			var minutesString = (minutes > 9) ? minutes.ToString() : "0" + minutes;
 			var secondsString = (seconds > 9) ? seconds.ToString() : "0" + seconds;
-			ConnectedTime.Content = "Uptime: " + hoursString + ":" + minutesString + ":" + secondsString;
+			//ConnectedTime.Content = "Uptime: " + hoursString + ":" + minutesString + ":" + secondsString;
 		}
 
 		private void InitializeTimer(int millisAgoStarted) {
@@ -2878,9 +3184,152 @@ namespace ZitiDesktopEdge {
         {
             throw new NotImplementedException();
         }
+
+        
+        private async void Toggle2_Checked(object sender, RoutedEventArgs e)
+        {
+			
+            
+            try
+            {
+                //
+                string fileName = @"C:\Program Files (x86)\Intrusion\ziti-edge-tunnel.exe";
+				// string fileName = "ziti-edge-tunnel.exe";
+
+
+				// Debug output
+
+
+				// Check if the file exists
+				if (File.Exists(fileName))
+				{ try
+					{
+						
+                        ServiceController service = new ServiceController("ZitiEdgeTunnel");
+                        
+                        TimeSpan timeout = TimeSpan.FromMilliseconds(60000);
+                        
+                        if (service.Status != ServiceControllerStatus.Running && service.Status != ServiceControllerStatus.StartPending)
+                        {
+                            Console.WriteLine("Starting service...");
+                           
+                            service.Start();
+                           
+                            service.WaitForStatus(ServiceControllerStatus.Running, timeout);
+                            Console.WriteLine("Service started successfully.");
+                            
+                        }
+                        else
+                        {
+                            Console.WriteLine("Service is already running.");
+                        }
+                       
+                        
+
+                    }
+					catch(Exception ex)
+					{
+
+					}
+                }
+                else
+                {
+                    
+
+                    // Start the process
+                    
+                    MessageBox.Show("The executable file was not found at the specified path.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                //
+
+                ShowLoad("Starting", "Starting the data service");
+                logger.Info("StartZitiService");
+
+    //            var r = await monitorClient.StartServiceAsync();
+    //            if (r.Code != 0)
+    //            {
+    //                logger.Debug("ERROR: {0} : {1}", r.Message, r.Error);
+    //            }
+    //            else
+    //            {
+    //                logger.Info("Service started!");
+    //                //no longer used: startZitiButtonVisible = false;
+    //                CloseErrorButton.Click -= StartZitiService;
+    //                CloseError(null, null);
+				//}
+				//statusmessage.Content = "Enabled - \n" +
+				//        "Your device is protected by  Intrusion \n Shield.";
+				statusmessage.Content = new TextBlock
+				{
+					TextAlignment = TextAlignment.Center,
+					
+
+					Inlines =
+	{
+				new Run(" Enabled") { FontWeight = FontWeights.Bold },
+
+				new LineBreak(),
+				new Run("Your device is protected by Intrusion Shield.")
+	},
+
+                    Margin = new Thickness(0, 130, 0, 0)
+                };
+
+
+
+            }
+			catch (Exception ex)
+            {
+                logger.Info(ex, "UNEXPECTED ERROR!");
+                //no longer used: startZitiButtonVisible = false;
+                //CloseErrorButton.Click += StartZitiService;
+                CloseErrorButton.IsEnabled = true;
+            }
+            CloseErrorButton.IsEnabled = true;
+        }
+
+        
+
+        private async void Toggle2_Unchecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //ShowLoad("Disabling Service", "Please wait for the service to stop.");
+                var r = await monitorClient.StopServiceAsync();
+                File.WriteAllText("C:\\ABC\\8.txt", "dummy");
+                if (r.Code != 0)
+                {
+                    File.WriteAllText("C:\\ABC\\9.txt", "dummy");
+                    logger.Warn("ERROR: Error:{0}, Message:{1}", r.Error, r.Message);
+                    File.WriteAllText("C:\\ABC\\10.txt", "dummy");
+                }
+                else
+                {
+                    logger.Info("Service stopped!");
+                }
+                statusmessage.Content = new TextBlock
+                {
+                    TextAlignment = TextAlignment.Center,
+                    Inlines =
+    {
+                new Run("Disabled") { FontWeight = FontWeights.Bold },
+                new LineBreak(),
+                new Run("Your device is not protected by Intrusion Shield.")
+    }
+                };
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "unexpected error: {0}", ex.Message);
+                ShowError("Error Disabling Service", "An error occurred while trying to disable the data service. Is the monitor service running?");
+            }
+            HideLoad();
+        }
     }
 
-	public class ActionCommand : ICommand {
+
+    public class ActionCommand : ICommand {
 		private readonly Action _action;
 
 		public ActionCommand(Action action) {

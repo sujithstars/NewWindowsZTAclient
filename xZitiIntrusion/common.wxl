@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="Company">Intrusion Shield Endpoint</String>
+	<String Id="ProductName_x86">Intrusion Shield Endpoint</String>
+	<String Id="ProductName_x64">Intrusion Shield Endpoint</String>
+	<String Id="Language">1033</String>
+</WixLocalization>

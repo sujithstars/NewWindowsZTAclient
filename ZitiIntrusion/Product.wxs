@@ -1,33 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+
+
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	
 	<?if $(var.Platform)=x64 ?>
 	<?define ProductCode="{B7E41AD1-CF61-4850-8B7C-652383C1FB7C}"?>
 	<?else?>
 	<?define ProductCode="{867D110D-9A48-4F6B-A84B-7818D09F23D6}"?>
 	<?endif?>
-	
-	<?define UpgradeCode="{BE371229-3049-4DCB-875F-B1B1A448C98B}"?>
+
+
+
+
+
+
+	<?define  UpgradeCode="{BE371229-3049-4DCB-875F-B1B1A448C98B}"?>
 	<?define ShieldProperty = "C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0" ?>
 	<?define ShieldPlugin = "C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin" ?>
-	
+	<?define DesktopEdge = "C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\2024\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug" ?>
+	<?define ImageAssets = "C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\2024\windows-zta-client-AllowDeny\DesktopEdge\Assets\Images" ?>
+
+	<?define ZitiUpdateService = "C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\2024\windows-zta-client-AllowDeny\ZitiUpdateService\bin\Debug" ?>
+
+
 	<?define BuildVersion=1.2.3.01 ?>
-	
-			 <Product Id="$(var.ProductCode)" 
+
+	<Product Id="$(var.ProductCode)"
 			 Name="!(loc.ProductName_$(var.Platform))"
 			 Language="!(loc.Language)"
-			 Version="$(var.BuildVersion)" 
-			 Manufacturer="$(loc.Company)" 
+			 Version="$(var.BuildVersion)"
+			 Manufacturer="Intrusion"
+			 
 			 UpgradeCode="$(var.UpgradeCode)">
-			 <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />			 
-				  <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\license.rtf" />
-				  
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\license.rtf" />
 
-				  <!-- <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" /> -->
-				  <Property Id="WIXUI_INSTALLDIR" Value="ProgramFilesFolder" />
-				  
-				  <UIRef Id="WixUI_InstallDir" />
- 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+		<!-- <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" /> -->
+		<Property Id="WIXUI_INSTALLDIR" Value="ProgramFilesFolder" />
+
+		<UIRef Id="WixUI_InstallDir" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Please uninstalled and try" />
 		<MediaTemplate EmbedCab="yes" />
 
 
@@ -37,7 +52,7 @@
 			<ComponentRef Id="ApplicationShortcutDesktop"></ComponentRef>
 			<ComponentRef Id="BinComponent" />
 			<ComponentRef Id="refComponent" />
-			
+
 			<ComponentRef Id="net6.0" />
 			<ComponentRef Id="IntrusionExtensionFileComponent" />
 			<ComponentRef Id="BatchFileComponent" />
@@ -48,22 +63,45 @@
 			<ComponentRef Id="manifest" />
 			<ComponentRef Id="popuphtml" />
 			
-		</Feature>
 			
-	
-</Product>
+			<ComponentRef Id="StartupShortcut" />
+		
+			<ComponentRef Id="zitidesed" />
+			<ComponentRef Id="MyzitiupdateService" />
+			<ComponentRef Id="cmp_ZitiUpdateService.pdb" />
+			
+			<ComponentRef Id="cmp_System.Security.Principal.Windows" />
+			<ComponentRef Id="cmp_System.Security.Cryptography.Pkcs" />
+			<ComponentRef Id="cmp_System.Security.AccessControl" />
+			<ComponentRef Id="cmp_System.Management.Automation" />
+			
+			
+
+
+
+
+
+
+
+
+
+
+		</Feature>
+
+
+	</Product>
 
 	<Fragment >
-		<Icon Id="icon.ico" SourceFile="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\Assets\Images\ziti-white.ico"/>
-		<WixVariable Id="WixUIDialogBmp" Value="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\Assets\Images\connected.png"/>
-		<WixVariable Id="WixUIIcon" Value="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\Assets\Images\ziti-white.ico"/>
+		<Icon Id="icon.ico" SourceFile="$(var.ImageAssets)\ziti-white.ico"/>
+		<WixVariable Id="WixUIDialogBmp" Value="$(var.ImageAssets)\connected.png"/>
+		<WixVariable Id="WixUIIcon" Value="$(var.ImageAssets)\ziti-white.ico"/>
 		<Directory Id="TARGETDIR" Name="SourceDir" >
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLFOLDER" Name="Intrusion" >
 					<Directory Id="BINFOLDER" Name="Bin">
 						<Component Id="BinComponent" Guid="492e969b-6c87-4cac-9cdc-040e09e0b7db">
 							<!-- Include all files from the bin folder -->
-							<File Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\log.txt" />
+							<File Source="$(var.ShieldProperty)\log.txt" />
 
 
 							<!-- Add more files as needed -->
@@ -72,7 +110,7 @@
 					<Directory Id="refFOLDER" Name="ref">
 						<Component Id="refComponent" Guid="4101ba4f-0f97-4dab-82a2-b3a48a5974f7">
 							<!-- Include all files from the bin folder -->
-							<File Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\ref\ShieldProxyConsole.dll" />
+							<File Source="$(var.ShieldProperty)\ref\ShieldProxyConsole.dll" />
 
 							<!-- Add more files as needed -->
 						</Component>
@@ -83,10 +121,10 @@
 								<Directory Id="net6.0FOLDER" Name="net6.0">
 									<Component Id="net6.0" Guid="9a7bd404-9293-4605-af71-e5aa1897b953">
 										<!-- Include all files from the bin folder -->
-										<File Id="systemevent" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll" />
-										<File Id="commondl" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll" />
-										<File Id="mgntdl" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Management.dll" />
-										<File Id="extntdl" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll" />
+										<File Id="systemevent" Source="$(var.ShieldProperty)\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll" />
+										<File Id="commondl" Source="$(var.ShieldProperty)\runtimes\win\lib\net6.0\System.Drawing.Common.dll" />
+										<File Id="mgntdl" Source="$(var.ShieldProperty)\runtimes\win\lib\net6.0\System.Management.dll" />
+										<File Id="extntdl" Source="$(var.ShieldProperty)\runtimes\win\lib\net6.0\System.Windows.Extensions.dll" />
 
 										<!-- Add more files as needed -->
 									</Component>
@@ -94,10 +132,28 @@
 							</Directory>
 						</Directory>
 					</Directory>
+					<!-- Define the NetFoundry file component
+		
+					<Component Id="TZitiDesktopEdgeComponent" >
+              <File Id="TZitiDesktopEdgeFile" Name="TZitiDesktopEdge.exe" Source="C:\Users\Sujith.Kumar\Downloads\Ziti.Desktop.Edge.Client-2.5.1.0.exe" />
+            </Component>	
+			 -->
+					<Directory Id="NetFoundry" Name="NewNetFoundry Inc Test">
+						<Directory Id="ZiDesktopEdge" Name="Ziti Desktop Edge">
+							<Directory Id="logs" Name="logs"></Directory>
+								<Directory Id="updates" Name="updates"></Directory>
+							
+									
+								
+						</Directory>
+					</Directory>
+							
 					<!-- Define the .crx file component -->
 					<Directory Id="ChromeEX" Name="ChromeEX">
 						<Component Id="IntrusionExtensionFileComponent" Guid="a83688ee-3b6c-415d-b724-754baf09caab">
 							<File Id="IntrusionExtensionFile" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin.crx" KeyPath="yes"/>
+
+
 						</Component>
 
 
@@ -106,7 +162,7 @@
 					<Directory Id="ChromeBatch" Name="ChromeBatch">
 						<Component Id="BatchFileComponent" Guid="55e9adb0-b39a-4cbe-be61-719586aa3860">
 							<!--<File Id="MyBatchFile" Source="C:\Users\Sujith.Kumar\Desktop\All Details\one.bat" KeyPath="yes" />-->
-						<File Id="MyBatchFile" Source="C:\Users\Sujith.Kumar\Desktop\install-script.bat" KeyPath="yes" />
+							<File Id="MyBatchFile" Source="C:\Users\Sujith.Kumar\Desktop\install-script.bat" KeyPath="yes" />
 						</Component>
 					</Directory>
 
@@ -119,48 +175,52 @@
 					<Directory Id="ShieldBrowserPlugin" Name="Shield Browser Plugin">
 						<Directory Id="css" Name="css">
 							<Component Id="popup" Guid="8d067a28-3164-430f-b1a7-9a9b95cf0381">
-										<File Id="popupfile" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\css\popup.css" ></File>
-				
+								<File Id="popupfile" Source="$(var.ShieldPlugin)\css\popup.css" ></File>
+
 							</Component>
 						</Directory>
 						<Directory Id="images" Name="images">
 							<Component Id="imgall" Guid="972e68ce-714f-471c-bd4d-b55edf2e0643">
-										<File Id="biglogowhite" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\big-logo-white.png" ></File>
-								<File Id="iconactive16" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-active-16.png" ></File>
-								<File Id="iconactive19" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-active-19.png" ></File>
-							<File Id="iconactive32" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-active-32.png" ></File>
-							<File Id="iconactive38" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-active-38.png" ></File>
-							<File Id="iconactive48" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-active-48.png" ></File>
-						<File Id="iconactive64" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-active-64.png" ></File>					
-							<File Id="iconactive128" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-active-128.png" ></File>
-							<File Id="icondisabled16" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-disabled-16.png" ></File>
-							<File Id="icondisabled19" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-disabled-19.png" ></File>
-							<File Id="icondisabled32" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-disabled-32.png" ></File>
-							<File Id="icondisabled38" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-disabled-38.png" ></File>
-							<File Id="icondisabled48" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-disabled-48.png" ></File>
-						<File Id="icondisabled128" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-disabled-128.png" ></File>
-								<File Id="iconwhite128" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\icon-white-128.png" ></File>
-								<File Id="INTLogoBlueweb" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\INT-Logo-Blue-web.png" ></File>
-								<File Id="INTLogoWhitesm" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\images\INT-Logo-White_sm.png" ></File>
-							
-							
-							
+								<File Id="biglogowhite" Source="$(var.ShieldPlugin)\images\big-logo-white.png" ></File>
+								<File Id="iconactive16" Source="$(var.ShieldPlugin)\images\icon-active-16.png" ></File>
+								<File Id="iconactive19" Source="$(var.ShieldPlugin)\images\icon-active-19.png" ></File>
+								<File Id="iconactive32" Source="$(var.ShieldPlugin)\images\icon-active-32.png" ></File>
+								<File Id="iconactive38" Source="$(var.ShieldPlugin)\images\icon-active-38.png" ></File>
+								<File Id="iconactive48" Source="$(var.ShieldPlugin)\images\icon-active-48.png" ></File>
+								<File Id="iconactive64" Source="$(var.ShieldPlugin)\images\icon-active-64.png" ></File>
+								<File Id="iconactive128" Source="$(var.ShieldPlugin)\images\icon-active-128.png" ></File>
+								<File Id="icondisabled16" Source="$(var.ShieldPlugin)\images\icon-disabled-16.png" ></File>
+								<File Id="icondisabled19" Source="$(var.ShieldPlugin)\images\icon-disabled-19.png" ></File>
+								<File Id="icondisabled32" Source="$(var.ShieldPlugin)\images\icon-disabled-32.png" ></File>
+								<File Id="icondisabled38" Source="$(var.ShieldPlugin)\images\icon-disabled-38.png" ></File>
+								<File Id="icondisabled48" Source="$(var.ShieldPlugin)\images\icon-disabled-48.png" ></File>
+								<File Id="icondisabled128" Source="$(var.ShieldPlugin)\images\icon-disabled-128.png" ></File>
+								<File Id="iconwhite128" Source="$(var.ShieldPlugin)\images\icon-white-128.png" ></File>
+								<File Id="INTLogoBlueweb" Source="$(var.ShieldPlugin)\images\INT-Logo-Blue-web.png" ></File>
+								<File Id="INTLogoWhitesm" Source="$(var.ShieldPlugin)\images\INT-Logo-White_sm.png" ></File>
+
+
+
 							</Component>
 						</Directory>
 						<Directory Id="js" Name="js">
 							<Component Id="jsall" Guid="ebbfdb9c-d73c-4f90-b4d3-57a93809d6e6">
-										<File Id="thirtyptwo" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\js\32.png" ></File>
-								<File Id="background" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\js\background.js" ></File>
-								<File Id="popupsecond" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\js\popup.js" ></File>
-				
+								<File Id="thirtyptwo" Source="$(var.ShieldPlugin)\js\32.png" ></File>
+								<File Id="background" Source="$(var.ShieldPlugin)\js\background.js" ></File>
+								<File Id="popupsecond" Source="$(var.ShieldPlugin)\js\popup.js" ></File>
+
 							</Component>
 						</Directory>
 						<Component Id="manifest" Guid="bedf55dd-0c80-4c5f-992e-1860d4abac3a">
-				<File Id="manifest" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\manifest.json" ></File>
-			</Component>
-					<Component Id="popuphtml" Guid="5a3ac012-3dc9-40a5-b19e-2be56a7f1faf">
-				<File Id="popuphtmlfile" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Shield Browser Plugin\popup.html" ></File>
-			</Component>
+							<File Id="manifest" Source="$(var.ShieldPlugin)\manifest.json" ></File>
+						</Component>
+						<Component Id="popuphtml" Guid="5a3ac012-3dc9-40a5-b19e-2be56a7f1faf">
+							<File Id="popuphtmlfile" Source="$(var.ShieldPlugin)\popup.html" ></File>
+						</Component>
+
+
+						
+
 					</Directory>
 
 				</Directory>
@@ -171,256 +231,406 @@
 
 			</Directory>
 			<Directory Id="DesktopFolder" Name="Desktop" >
-
+				
+				
 			</Directory>
-
+			 
+			<Directory Id="StartMenuFolder" Name="Programs">
+				<Directory Id="StartupFolder" Name="Startup">
+					<Component Id="StartupShortcut" Guid="ad4b141d-9cdd-4a32-90e2-858b7dc84cc6">
+						
+						<Shortcut Id="MyAppShortcut"
+								  Name="Intrusion Application"
+								  Description="My Application"
+								  Target="[INSTALLFOLDER]ZitiDesktopEdge.exe"
+								  WorkingDirectory="INSTALLFOLDER"
+								  
+								  Show="normal" />
+						<RemoveFolder Id="RemoveStartupShortcut" On="uninstall"/>
+						<RegistryValue Root="HKCU" Key="Software\MyApp" Name="Installed" Type="string" Value="Yes" KeyPath="yes"/>
+					</Component>
+				</Directory>
+			</Directory>
+			 
 		</Directory>
 
 
+		
+		<CustomAction Id="RunBatFile" FileKey="MyBatchFile" ExeCommand="C:\Program Files (x86)\Intrusion\ChromeBatch\install-script.bat" Return="asyncNoWait" />
+		
+		<InstallExecuteSequence>
+			<Custom Action="RunBatFile" After="InstallFinalize">NOT Installed</Custom>
+		</InstallExecuteSequence>
+		<!--
+		<CustomAction Id="RunBattunnelFile" FileKey="fil_ZitiEdgeTunnel" ExeCommand="" Return="ignore" />
+		<InstallExecuteSequence>
+			<Custom Action="RunBattunnelFile" After="InstallFinalize">NOT Installed</Custom>
+		</InstallExecuteSequence>
+		-->
+	
+		
+		
+		
+		
+		
 
-		<!-- Define the custom action
-		<CustomAction Id="InstallChromeExtension"  FileKey="InstallExtensionScript.ps1" ExeCommand="powershell.exe -ExecutionPolicy Bypass -File [#InstallExtensionScript.ps1] [#ChromeExtension.crx]" Execute="deferred" Return="check" />-->
-<CustomAction Id="RunBatFile" FileKey="MyBatchFile" ExeCommand="" Return="ignore" />
-<InstallExecuteSequence>
-    <Custom Action="RunBatFile" After="InstallFinalize">NOT Installed</Custom>
-</InstallExecuteSequence>
+
 
 	</Fragment>
 	<Fragment>
 		<DirectoryRef Id="ApplicationProgramsFolder">
 			<Component Id="ApplicationShortcut" Guid="9bd13330-6540-406f-a3a8-d7f7c69ae7f9">
-				<Shortcut Id="ApplicationStartMenuShortcuts" Name="ShieldIntrusionProjectf" Description="IntrusionProjecte" Target="[INSTALLFOLDER]ShieldProxyConsole.exe" WorkingDirectory="INSTALLFOLDER" />
-				<Shortcut Id="ApplicationStartMenuShortcut" Name="Intrusion Shield Endpointc" Description="IntrusionProjectd" Target="[INSTALLFOLDER]ZitiDesktopEdge.exe" WorkingDirectory="INSTALLFOLDER" />
+				<Shortcut Id="ApplicationStartMenuShortcuts" Show="normal" Name="ShieldIntrusionProjectf"  Description="IntrusionProjecte" Target="[INSTALLFOLDER]ShieldProxyConsole.exe" WorkingDirectory="INSTALLFOLDER" />
+
+				<Shortcut Id="ApplicationStartMenuShortcut" Name="Intrusion Shield Endpointc"  Description="IntrusionProjectd" Target="[INSTALLFOLDER]ZitiDesktopEdge.exe" WorkingDirectory="INSTALLFOLDER" />
 				<RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\MyIntrusionApplication" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			
+    
 			</Component>
 
 		</DirectoryRef>
 		<DirectoryRef Id="DesktopFolder">
 			<Component Id="ApplicationShortcutDesktop" Guid="cde1e030-eb64-49a5-b7b8-400b379c2d1a">
-				<Shortcut Id="ApplicationDesktopShortcut" Name="Intrusion Shield Endpointg" Description="IntrusionProject" Target="[INSTALLFOLDER]ZitiDesktopEdge.exe" WorkingDirectory="INSTALLFOLDER" />
+				<Shortcut Id="ApplicationDesktopShortcut" Name="Intrusion Shield Endpoint" Description="IntrusionProject" Target="[INSTALLFOLDER]ZitiDesktopEdge.exe" WorkingDirectory="INSTALLFOLDER" />
+
 				
 				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
 				<RegistryValue Root="HKCU" Key="Software\MyIntrusionApplication" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
-			
+
 		</DirectoryRef>
+
 		
-		
-		
+
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			
+
 			<!-- Source="$(var.SourceDir)\ UpgradeCode="43da3bc4-6b36-45de-8bcf-bf994e9c8d0a" TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources tobinar this installer. -->
 			<Component Id="ShieldProxyConsole.runtimeconfig.json"  >
-				<File Id="ShieldProxyConsole.runtimeconfig.json" Name="ShieldProxyConsole.runtimeconfig.json" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\ShieldProxyConsole.runtimeconfig.json"></File>
+				<File Id="ShieldProxyConsole.runtimeconfig.json" Name="ShieldProxyConsole.runtimeconfig.json" Source="$(var.ShieldProperty)\ShieldProxyConsole.runtimeconfig.json"></File>
 			</Component>
 
-			
+
 
 			<Component Id="log.txt"  >
-				<File Id="fllog.txt" Name="log.txt" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\log.txt"></File>
+				<File Id="fllog.txt" Name="log.txt" Source="$(var.ShieldProperty)\log.txt"></File>
 			</Component>
 
-			
+
 			<Component Id="ShieldProxyConsoledeps.json"  >
-				<File Id="ShieldProxyConsoledeps.json" Name="ShieldProxyConsole.deps.json" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\ShieldProxyConsole.deps.json"></File>
+				<File Id="ShieldProxyConsoledeps.json" Name="ShieldProxyConsole.deps.json" Source="$(var.ShieldProperty)\ShieldProxyConsole.deps.json"></File>
 			</Component>
 
 			<Component Id="configuration"  >
-				<File Id="configuration" Name="configuration.json" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\configuration.json"></File>
+				<File Id="configuration" Name="configuration.json" Source="$(var.ShieldProperty)\configuration.json"></File>
 			</Component>
 
 			<Component Id="configuration02"  >
-				<File Id="configuration02" Name="configuration02.json" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\configuration02.json"></File>
+				<File Id="configuration02" Name="configuration02.json" Source="$(var.ShieldProperty)\configuration02.json"></File>
 			</Component>
 
 			<Component Id="ShieldProxyConsoledll"  >
-				<File Id="ShieldProxyConsoledll" Name="ShieldProxyConsole.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\ShieldProxyConsole.dll"></File>
+				<File Id="ShieldProxyConsoledll" Name="ShieldProxyConsole.dll" Source="$(var.ShieldProperty)\ShieldProxyConsole.dll"></File>
 			</Component>
 
-			
+
 
 			<Component Id="System.Windows.Extensions"  >
-				<File Id="System.Windows.Extensions" Name="System.Windows.Extensions.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\System.Windows.Extensions.dll"></File>
+				<File Id="System.Windows.Extensions" Name="System.Windows.Extensions.dll" Source="$(var.ShieldProperty)\System.Windows.Extensions.dll"></File>
 			</Component>
 
 			<Component Id="System.Security.Permissions"  >
-				<File Id="System.Security.Permissions" Name="System.Security.Permissions.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\System.Security.Permissions.dll"></File>
+				<File Id="System.Security.Permissions" Name="System.Security.Permissions.dll" Source="$(var.ShieldProperty)\System.Security.Permissions.dll"></File>
 			</Component>
 
 			<Component Id="System.Management"  >
-				<File Id="System.Management" Name="System.Management.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\System.Management.dll"></File>
+				<File Id="System.Management" Name="System.Management.dll" Source="$(var.ShieldProperty)\System.Management.dll"></File>
 			</Component>
 
 			<Component Id="System.Drawing.Common"  >
-				<File Id="System.Drawing.Common" Name="System.Drawing.Common.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\System.Drawing.Common.dll"></File>
+				<File Id="System.Drawing.Common" Name="System.Drawing.Common.dll" Source="$(var.ShieldProperty)\System.Drawing.Common.dll"></File>
 			</Component>
 
 
 			<Component Id="System.CodeDom"  >
-				<File Id="System.CodeDom" Name="System.CodeDom.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\System.CodeDom.dll"></File>
+				<File Id="System.CodeDom" Name="System.CodeDom.dll" Source="$(var.ShieldProperty)\System.CodeDom.dll"></File>
 			</Component>
 
 
 			<Component Id="ShieldProxyConsole.pdb"  >
-				<File Id="ShieldProxyConsole.pdb" Name="ShieldProxyConsole.pdb" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\ShieldProxyConsole.pdb"></File>
+				<File Id="ShieldProxyConsole.pdb" Name="ShieldProxyConsole.pdb" Source="$(var.ShieldProperty)\ShieldProxyConsole.pdb"></File>
 			</Component>
 
 
 
 			<Component Id="sp_Newtonsoft.Json.dll"  >
-				<File Id="sp_Newtonsoft.Json.dll" Name="sp_Newtonsoft.Json.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\Newtonsoft.Json.dll"></File>
+				<File Id="sp_Newtonsoft.Json.dll" Name="sp_Newtonsoft.Json.dll" Source="$(var.ShieldProperty)\Newtonsoft.Json.dll"></File>
 			</Component>
 
 
 
 
 			<Component Id="Microsoft.Win32.SystemEvents.dll"  >
-				<File Id="Microsoft.Win32.SystemEvents.dll" Name="Microsoft.Win32.SystemEvents.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll"></File>
+				<File Id="Microsoft.Win32.SystemEvents.dll" Name="Microsoft.Win32.SystemEvents.dll" Source="$(var.ShieldProperty)\Microsoft.Win32.SystemEvents.dll"></File>
 			</Component>
 
 
 
 			<Component Id="BouncyCastle.Cryptography.dll"  >
-				<File Id="BouncyCastle.Cryptography.dll" Name="BouncyCastle.Cryptography.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\BouncyCastle.Cryptography.dll"></File>
+				<File Id="BouncyCastle.Cryptography.dll" Name="BouncyCastle.Cryptography.dll" Source="$(var.ShieldProperty)\BouncyCastle.Cryptography.dll"></File>
 			</Component>
 
 
 			<Component Id="ARSoft.Tools.Net.dll"  >
-				<File Id="ARSoft.Tools.Net.dll" Name="ARSoft.Tools.Net.dll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\ARSoft.Tools.Net.dll"></File>
+				<File Id="ARSoft.Tools.Net.dll" Name="ARSoft.Tools.Net.dll" Source="$(var.ShieldProperty)\ARSoft.Tools.Net.dll"></File>
 			</Component>
-
+			
 			<Component Id="ShieldProxyConsole.exe"  >
-				<File Id="ShieldProxyConsole" Name="ShieldProxyConsole.exe" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\ShieldProxyConsole.exe"></File>
+				 <File Id="ShieldProxyConsole.exe"  Name="ShieldProxyConsole.exe"  Source="$(var.ShieldProperty)\ShieldProxyConsole.exe"></File>
 			</Component>
+			
+			 
 			<Component Id="ShieldProxy.vbs"  >
-				<File Id="ShieldProxy" Name="ShieldProxy.vbs" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\ShieldDNSProxyCSharp-main\ShieldProxyConsole\bin\Debug\net6.0\ShieldProxy.vbs"></File>
+				<File Id="AShieldProxy" Name="ShieldProxy.vbs" Source="$(var.ShieldProperty)\ShieldProxy.vbs"></File>
+			</Component>
+			
+
+			 <!-- ZitiDesktop. -->
+			<Component Id="ZitiDesktopEdge"  Guid="6d9aa370-3a2d-4998-b3cd-cf2ad35983cf">
+				<File Id="ZitiDesktopEdge" Name="ZitiDesktopEdge.exe" Source="$(var.DesktopEdge)\ZitiDesktopEdge.exe"></File>
 			</Component>
 
-			<!--  ZitiDesktop. -->
-			 <Component Id="ZitiDesktopEdge"  Guid="6d9aa370-3a2d-4998-b3cd-cf2ad35983cf">
-				 <File Id="ZitiDesktopEdge" Name="ZitiDesktopEdge.exe" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\ZitiDesktopEdge.exe"></File>
-		 </Component> 
-	
 			<Component Id="cmp_Microsoft.Bcl.AsyncInterfaces" >
-				<File Id="fil_Microsoft.Bcl.AsyncInterfaces.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll"></File>
+				<File Id="fil_Microsoft.Bcl.AsyncInterfaces.dll"  Source="$(var.DesktopEdge)\Microsoft.Bcl.AsyncInterfaces.dll"></File>
 			</Component>
 
 			<Component Id="cmp_Microsoft.Identity.Client" Guid="fcad49aa-33bb-4008-898a-602bf7dd00b9" >
-				<File Id="fil_Microsoft.Identity.Client.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Microsoft.Identity.Client.dll"></File>
+				<File Id="fil_Microsoft.Identity.Client.dll"  Source="$(var.DesktopEdge)\Microsoft.Identity.Client.dll"></File>
 			</Component>
 
 			<Component Id="cmp_Microsoft.IdentityModel.Abstractions"  >
-				<File Id="fil_Microsoft.IdentityModel.Abstractions.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Microsoft.IdentityModel.Abstractions.dll"></File>
+				<File Id="fil_Microsoft.IdentityModel.Abstractions.dll"  Source="$(var.DesktopEdge)\Microsoft.IdentityModel.Abstractions.dll"></File>
 			</Component>
 
 			<Component Id="cmp_Microsoft.IdentityModel.JsonWebTokens"  >
-				<File Id="fil_Microsoft.IdentityModel.JsonWebTokens.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll"></File>
+				<File Id="fil_Microsoft.IdentityModel.JsonWebTokens.dll"  Source="$(var.DesktopEdge)\Microsoft.IdentityModel.JsonWebTokens.dll"></File>
 			</Component>
 
 			<Component Id="cmp_Microsoft.IdentityModel.Logging"  >
-				<File Id="fil_Microsoft.IdentityModel.Logging.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Microsoft.IdentityModel.Logging.dll"></File>
+				<File Id="fil_Microsoft.IdentityModel.Logging.dll"  Source="$(var.DesktopEdge)\Microsoft.IdentityModel.Logging.dll"></File>
 			</Component>
 
 			<Component Id="cmp_Microsoft.IdentityModel.Tokens"  >
-				<File Id="fil_Microsoft.IdentityModel.Tokens.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Microsoft.IdentityModel.Tokens.dll"></File>
+				<File Id="fil_Microsoft.IdentityModel.Tokens.dll"  Source="$(var.DesktopEdge)\Microsoft.IdentityModel.Tokens.dll"></File>
 			</Component>
 
 			<Component Id="cmp_Microsoft.Toolkit.Uwp.Notifications"  >
-				<File Id="fil_Microsoft.Toolkit.Uwp.Notifications.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Microsoft.Toolkit.Uwp.Notifications.dll"></File>
+				<File Id="fil_Microsoft.Toolkit.Uwp.Notifications.dll"  Source="$(var.DesktopEdge)\Microsoft.Toolkit.Uwp.Notifications.dll"></File>
 			</Component>
 
 			<Component Id="cmp_Microsoft.Toolkit.Uwp.Notifications.pdb"  >
-				<File Id="fil_Microsoft.Toolkit.Uwp.Notifications.pdb"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Microsoft.Toolkit.Uwp.Notifications.pdb"></File>
+				<File Id="fil_Microsoft.Toolkit.Uwp.Notifications.pdb"  Source="$(var.DesktopEdge)\Microsoft.Toolkit.Uwp.Notifications.pdb"></File>
 			</Component>
 
 			<Component Id="cmp_Newtonsoft.Json"  >
-				<File Id="fil_Newtonsoft.Json.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\Newtonsoft.Json.dll"></File>
+				<File Id="fil_Newtonsoft.Json.dll"  Source="$(var.DesktopEdge)\Newtonsoft.Json.dll"></File>
 			</Component>
 
 			<Component Id="cmp_NLog"  >
-				<File Id="fil_NLog.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\NLog.dll"></File>
+				<File Id="fil_NLog.dll"  Source="$(var.DesktopEdge)\NLog.dll"></File>
 			</Component>
 
 			<Component Id="cmp_QRCoder"  >
-				<File Id="fil_QRCoder.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\QRCoder.dll"></File>
+				<File Id="fil_QRCoder.dll"  Source="$(var.DesktopEdge)\QRCoder.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.Buffers"  >
-				<File Id="fil_System.Buffers.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.Buffers.dll"></File>
+				<File Id="fil_System.Buffers.dll"  Source="$(var.DesktopEdge)\System.Buffers.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.IdentityModel.Tokens.Jwt"  >
-				<File Id="fil_System.IdentityModel.Tokens.Jwt.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.IdentityModel.Tokens.Jwt.dll"></File>
+				<File Id="fil_System.IdentityModel.Tokens.Jwt.dll"  Source="$(var.DesktopEdge)\System.IdentityModel.Tokens.Jwt.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.Memory"  >
-				<File Id="fil_System.Memory.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.Memory.dll"></File>
+				<File Id="fil_System.Memory.dll"  Source="$(var.DesktopEdge)\System.Memory.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.Numerics.Vectors"  >
-				<File Id="fil_System.Numerics.Vectors.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.Numerics.Vectors.dll"></File>
+				<File Id="fil_System.Numerics.Vectors.dll"  Source="$(var.DesktopEdge)\System.Numerics.Vectors.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.Runtime.CompilerServices.Unsafe"  >
-				<File Id="fil_System.Runtime.CompilerServices.Unsafe.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll"></File>
+				<File Id="fil_System.Runtime.CompilerServices.Unsafe.dll"  Source="$(var.DesktopEdge)\System.Runtime.CompilerServices.Unsafe.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.Text.Encodings.Web"  >
-				<File Id="fil_System.Text.Encodings.Web.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.Text.Encodings.Web.dll"></File>
+				<File Id="fil_System.Text.Encodings.Web.dll"  Source="$(var.DesktopEdge)\System.Text.Encodings.Web.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.Text.Json"  >
-				<File Id="fil_System.Text.Json.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.Text.Json.dll"></File>
+				<File Id="fil_System.Text.Json.dll"  Source="$(var.DesktopEdge)\System.Text.Json.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.Threading.Tasks.Extensions"  >
-				<File Id="fil_System.Threading.Tasks.Extensions.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.Threading.Tasks.Extensions.dll"></File>
+				<File Id="fil_System.Threading.Tasks.Extensions.dll"  Source="$(var.DesktopEdge)\System.Threading.Tasks.Extensions.dll"></File>
 			</Component>
 
 			<Component Id="cmp_System.ValueTuple"  >
-				<File Id="fil_System.ValueTuple.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\System.ValueTuple.dll"></File>
+				<File Id="fil_System.ValueTuple.dll"  Source="$(var.DesktopEdge)\System.ValueTuple.dll"></File>
 			</Component>
 
 			<Component Id="cmp_WpfMouseWheelLib"  >
-				<File Id="fil_WpfMouseWheelLib.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\WpfMouseWheelLib.dll"></File>
+				<File Id="fil_WpfMouseWheelLib.dll"  Source="$(var.DesktopEdge)\WpfMouseWheelLib.dll"></File>
 			</Component>
 
 			<Component Id="cmp_ZitiDesktopEdge.Client"  >
-				<File Id="fil_ZitiDesktopEdge.Client.dll"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\ZitiDesktopEdge.Client.dll"></File>
+				<File Id="fil_ZitiDesktopEdge.Client.dll"  Source="$(var.DesktopEdge)\ZitiDesktopEdge.Client.dll"></File>
 			</Component>
 
 			<Component Id="cmp_ZitiDesktopEdge.Clientpdb"  >
-				<File Id="fil_ZitiDesktopEdge.Client.pdb"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\ZitiDesktopEdge.Client.pdb"></File>
+				<File Id="fil_ZitiDesktopEdge.Client.pdb"  Source="$(var.DesktopEdge)\ZitiDesktopEdge.Client.pdb"></File>
 			</Component>
 
 			<Component Id="cmp_ZitiDesktopEdge"  >
-				<File Id="fil_ZitiDesktopEdge.pdb"  Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Independence2.2\windows-zta-client-AllowDeny\DesktopEdge\bin\Debug\ZitiDesktopEdge.pdb"></File>
+				<File Id="fil_ZitiDesktopEdge.pdb"  Source="$(var.DesktopEdge)\ZitiDesktopEdge.pdb"></File>
+			</Component>
+			
+			
+			
+			<Component Id="cmp_ZitiDesktopServiceconfig"  >
+				<File Id="fil_ZitiDesktopServiceconfig"  Source="$(var.ZitiUpdateService)\ZitiUpdateService.exe.config"></File>
 			</Component>
 
+			<Component Id="cmp_Microsoft.Win32.Registry"  >
+				<File Id="fil_Microsoft.Win32.Registry"  Source="$(var.ZitiUpdateService)\Microsoft.Win32.Registry.dll"></File>
+			</Component>
+
+			
+			<Component Id="cmp_System.Management.Automation"  >
+				<File Id="fil_System.Management.Automation"  Source="$(var.ZitiUpdateService)\System.Management.Automation.dll"></File>
+			</Component>
+			<Component Id="cmp_System.Security.AccessControl"  >
+				<File Id="fil_System.Security.AccessControl"  Source="$(var.ZitiUpdateService)\System.Security.AccessControl.dll"></File>
+			</Component>
+
+			<Component Id="cmp_System.Security.Cryptography.Pkcs"  >
+				<File Id="fil_System.Security.Cryptography.Pkcs"  Source="$(var.ZitiUpdateService)\System.Security.Cryptography.Pkcs.dll"></File>
+			</Component>
+
+			<Component Id="cmp_System.Security.Principal.Windows"  >
+				<File Id="fil_System.Security.Principal.Windows"  Source="$(var.ZitiUpdateService)\System.Security.Principal.Windows.dll"></File>
+			</Component>
+			
+			
+			<Component Id="cmp_ZitiUpdateService.pdb"  >
+				<File Id="fil_ZitiUpdateService.pdb"  Source="$(var.ZitiUpdateService)\ZitiUpdateService.pdb"></File>
+			</Component>
+			<!--
+			<Component Id="cmp_ZitiEdgeTunnel" Guid="f62e3af7-1d90-4ad4-9ae2-eb5d0a9b19ae">
+				
+				<File Id="fil_ZitiEdgeTunne" Source="C:\Users\Sujith.Kumar\Downloads\ziti-edge-tunnel.exe" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="cmp_ZitiDesktopService"  >
+				<File Id="fil_ZitiDesktopService"  Source="$(var.ZitiUpdateService)\ZitiUpdateService.exe"></File>
+			</Component>
+			<Component Id="cmp_ZitiTunnel" Guid="9b8d3214-83e4-4bf5-8bca-aec646573690">
+				
+				<File Id="fil_ZitiTunnel" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\FirstCodeChange\windows-zta-client-AllowDeny\ziti-edge-tunnel\build.bat" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="cmp_ZitiEdgeTunnel" Guid="f62e3af7-1d90-4ad4-9ae2-eb5d0a9b19ae">
+				
+				<File Id="fil_ZitiEdgeTunnel" Source="C:\Users\Sujith.Kumar\Downloads\ziti-edge-tunnel.exe" KeyPath="yes" />
+			</Component>
+			
+-->
+			
+
+			<Component Id="MytunnelService" Guid="56cec294-8798-4a5f-b638-87cb4aa5f5ee">
+	<File Id="fil_ZitiEdgeTunnel" Source="C:\Users\Sujith.Kumar\Downloads\ziti-edge-tunnel.exe" KeyPath="yes" />
+	<ServiceInstall
+	  Id="MyServicetunnelInstaller"
+	  Type="ownProcess"
+	  Name="ZitiEdgeTunnel"		  
+	  Description="This is my tunnnel service."
+	  Start="demand"
+	  ErrorControl="normal"
+	  
+		>
 
 
+	</ServiceInstall>
+	
+				<ServiceControl
+				  Id="tunnelStartMyServices"
+				  Name="ZitiEdgeTunnel"
+				  
+				  Stop="both"
+				  Remove="uninstall"
+				  Wait="yes" />
+</Component>
+
+<Component Id="MyzitiupdateService" Guid="8098d149-e37e-4271-b7f7-c0a2b52af8fb">
+	<File Id="fil_ZitiEdgeUpdateservice" Source="$(var.ZitiUpdateService)\ZitiUpdateService.exe" KeyPath="yes" />
 
 
+	<ServiceInstall
+	  Id="MyUpdateServiceInstaller"
+	  Type="ownProcess"
+	  Name="ZitiuPDATEsERVICE"
+				  
+	  Description="This is my ZitiuPDATEsERVICE service."
+	  Start="auto"
+	  ErrorControl="normal"
+	  
+		>
 
 
+	</ServiceInstall>
+	
+				<ServiceControl
+				  Id="uPDATEzITIStartMyServices"
+				  Name="ZitiuPDATEsERVICE"
+				  Start="install"
+				  Stop="both"
+				  Remove="uninstall"
+				  Wait="yes" />
+</Component>
 
 
+			<Component Id="zitidesed" Guid="d9b29623-4b6d-4fac-80e7-18df4a67991c">
+				<!-- Include all files from the bin folder -->
+				<File Id="dnsclient" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\DnsClient.dll" />
+				<File Id="Invisible.vs" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\invisible.vbs" />
+				<File Id="libuv" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\libuv.dll" />
+
+				<File Id="libgcc" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\libgcc_s_seh-1.dll" />
+				<File Id="libwin" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\libwinpthread-1.dll" />
+				<File Id="shieldprocybat" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\ShieldProxy.bat" />
+				<File Id="swidtag" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\regid.1995-09.com.example_c7fc53f3-82a4-4d28-a366-615dfa098a92.swidtag" />
 
 
+				<File Id="wintun" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\wintun.dll" />
+				<File Id="zitidll" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\ziti.dll" />
+				<File Id="zitiico" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\ziti.ico" />
+				<File Id="ziidesktopedgeexe" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\ZitiDesktopEdge.exe.config" />
+				<File Id="zitilog" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\ZitiDesktopEdge-log.config" />
+				<File Id="zitiupdatese" Source="C:\Users\Sujith.Kumar\source\LatestIntrusion\Running\Shield_Endpoint_1.22.2_Directory\Shield Endpoint\ZitiUpdateService-log.config" />
+				
+			</Component>
 
+			
+			
+		</ComponentGroup>
+		
 
+		
+	
 
-
-
-
-
-
-
-
-
-
-		</ComponentGroup>	
 	</Fragment>
+	
 </Wix>
+
 

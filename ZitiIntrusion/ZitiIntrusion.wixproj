@@ -8,6 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>Intrusion.Desktop.Shield.Client-1.2.3.01</OutputName>
     <OutputType>Package</OutputType>
+    <Name>ZitiIntrusion</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -36,7 +37,16 @@
     <EmbeddedResource Include="common.wxl" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Debug\en-us\Intrusion.Desktop.Shield.Client-1.2.3.01.msi" />
+    <Content Include="bin\Debug\en-us\Intrusion.Desktop.Shield.Client-1.2.3.01.wixpdb" />
+    <Content Include="bin\Debug\en-us\signtool.exe" />
     <Content Include="License.rtf" />
+    <Content Include="obj\Debug\Chrome.wixobj" />
+    <Content Include="obj\Debug\Product.wixobj" />
+    <Content Include="obj\Debug\ZitiIntrusion.wixproj.BindBuiltOutputsFileListen-us.txt" />
+    <Content Include="obj\Debug\ZitiIntrusion.wixproj.BindContentsFileListen-us.txt" />
+    <Content Include="obj\Debug\ZitiIntrusion.wixproj.BindOutputsFileListen-us.txt" />
+    <Content Include="obj\Debug\ZitiIntrusion.wixproj.FileList.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ShieldDNSProxyCSharp-main\ShieldProxyConsole\ShieldProxyConsole.csproj">
@@ -55,6 +65,29 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\ZitiDesktopEdge.Client\ZitiDesktopEdge.Client.csproj">
+      <Name>ZitiDesktopEdge.Client</Name>
+      <Project>{26b30979-99b5-4102-bd0b-129bedff0057}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\ZitiUpdateService\ZitiUpdateService.csproj">
+      <Name>ZitiUpdateService</Name>
+      <Project>{9ab81609-f5dd-40a6-87b5-f3279d48514d}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Debug\en-us\" />
+    <Folder Include="obj\" />
+    <Folder Include="obj\Debug\" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />

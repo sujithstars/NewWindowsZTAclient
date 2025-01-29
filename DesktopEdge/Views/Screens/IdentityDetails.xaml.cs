@@ -192,10 +192,10 @@ namespace ZitiDesktopEdge {
 
 				TotalPages = (total / PerPage) + 1;
 
-				double newHeight = MainHeight - 330;
-				MainDetailScroll.MaxHeight = newHeight;
-				MainDetailScroll.Height = newHeight;
-				MainDetailScroll.Visibility = Visibility.Visible;
+				double newHeight = MainHeight - 300;
+				//MainDetailScroll.MaxHeight = newHeight;
+				//MainDetailScroll.Height = newHeight;
+				//MainDetailScroll.Visibility = Visibility.Visible;
 
 				AuthMessageBg.Visibility = Visibility.Collapsed;
 				AuthMessageLabel.Visibility = Visibility.Collapsed;

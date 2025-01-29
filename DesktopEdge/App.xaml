@@ -4,7 +4,9 @@
              xmlns:local="clr-namespace:ZitiDesktopEdge"
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="ZitiDesktopEdge.App"
              ShutdownMode="OnExplicitShutdown"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MainWindow.xaml"
+    
+    >
     <Application.Resources>
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontFamily" Value="pack://application:,,,/Assets/Fonts/#Open Sans"/>

@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -291,6 +291,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
+    <None Include="bin\Debug\ZitiDesktopEdge-log.config" />
+    <None Include="bin\Debug\ZitiDesktopEdge.exe.config" />
     <None Include="ZitiDesktopEdge-log.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -504,6 +506,39 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\intrusion_changed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\zsujith.png" />
+    <Content Include="bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll" />
+    <Content Include="bin\Debug\Microsoft.Identity.Client.dll" />
+    <Content Include="bin\Debug\Microsoft.IdentityModel.Abstractions.dll" />
+    <Content Include="bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll" />
+    <Content Include="bin\Debug\Microsoft.IdentityModel.Logging.dll" />
+    <Content Include="bin\Debug\Microsoft.IdentityModel.Tokens.dll" />
+    <Content Include="bin\Debug\Microsoft.Toolkit.Uwp.Notifications.dll" />
+    <Content Include="bin\Debug\Microsoft.Toolkit.Uwp.Notifications.pdb" />
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Content Include="bin\Debug\NLog.dll" />
+    <Content Include="bin\Debug\QRCoder.dll" />
+    <Content Include="bin\Debug\System.Buffers.dll" />
+    <Content Include="bin\Debug\System.IdentityModel.Tokens.Jwt.dll" />
+    <Content Include="bin\Debug\System.Memory.dll" />
+    <Content Include="bin\Debug\System.Numerics.Vectors.dll" />
+    <Content Include="bin\Debug\System.Runtime.CompilerServices.Unsafe.dll" />
+    <Content Include="bin\Debug\System.Text.Encodings.Web.dll" />
+    <Content Include="bin\Debug\System.Text.Json.dll" />
+    <Content Include="bin\Debug\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="bin\Debug\System.ValueTuple.dll" />
+    <Content Include="bin\Debug\WpfMouseWheelLib.dll" />
+    <Content Include="bin\Debug\ZitiDesktopEdge.Client.dll" />
+    <Content Include="bin\Debug\ZitiDesktopEdge.Client.pdb" />
+    <Content Include="bin\Debug\ZitiDesktopEdge.exe" />
+    <Content Include="bin\Debug\ZitiDesktopEdge.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\DebugUpdates\" />
+    <Folder Include="bin\Releases\" />
+    <Folder Include="bin\Release\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

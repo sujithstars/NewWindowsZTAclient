@@ -23,6 +23,23 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "ZitiIntrusion", "ZitiIntrus
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShieldProxyConsole", "..\..\..\ShieldDNSProxyCSharp-main\ShieldProxyConsole\ShieldProxyConsole.csproj", "{B2ED4F43-84B7-4488-ACEE-25F281242F2B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BatFiles", "BatFiles", "{EB99F2FF-8C60-4028-BA20-354CCC94C4E1}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\Downloads\build.ps1 = ..\..\..\..\..\Downloads\build.ps1
+		..\..\..\..\..\Desktop\install-script.bat = ..\..\..\..\..\Desktop\install-script.bat
+		..\..\..\..\..\Desktop\InstallExtensionScript.ps1 = ..\..\..\..\..\Desktop\InstallExtensionScript.ps1
+		..\..\..\Shield Browser Plugin.crx = ..\..\..\Shield Browser Plugin.crx
+		..\..\..\..\..\Downloads\ziti-edge-tunnel.exe = ..\..\..\..\..\Downloads\ziti-edge-tunnel.exe
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ziti-edge-tunnel", "ziti-edge-tunnel", "{F0789810-D809-4B1C-AE5F-580F4F12844D}"
+	ProjectSection(SolutionItems) = preProject
+		ziti-edge-tunnel\build.bat = ziti-edge-tunnel\build.bat
+		ziti-edge-tunnel\set-env.bat = ziti-edge-tunnel\set-env.bat
+	EndProjectSection
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "DZitiIntrusion", "..\..\..\..\..\Downloads\xZitiIntrusion\xZitiIntrusion\DZitiIntrusion.wixproj", "{D9E7E341-868A-40D3-93AF-73100EE57172}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -247,6 +264,46 @@ Global
 		{B2ED4F43-84B7-4488-ACEE-25F281242F2B}.Releases|x64.Build.0 = Release|Any CPU
 		{B2ED4F43-84B7-4488-ACEE-25F281242F2B}.Releases|x86.ActiveCfg = Release|Any CPU
 		{B2ED4F43-84B7-4488-ACEE-25F281242F2B}.Releases|x86.Build.0 = Release|Any CPU
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|Any CPU.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|ARM.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|ARM.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|ARM64.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|ARM64.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|x64.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|x64.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|x86.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Debug|x86.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|Any CPU.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|Any CPU.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|ARM.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|ARM.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|ARM64.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|ARM64.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|x64.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|x64.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|x86.ActiveCfg = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.DebugUpdates|x86.Build.0 = Debug|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|Any CPU.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|Any CPU.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|ARM.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|ARM.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|ARM64.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|ARM64.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|x64.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|x64.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|x86.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Release|x86.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|Any CPU.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|Any CPU.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|ARM.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|ARM.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|ARM64.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|ARM64.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|x64.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|x64.Build.0 = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|x86.ActiveCfg = Release|x86
+		{D9E7E341-868A-40D3-93AF-73100EE57172}.Releases|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

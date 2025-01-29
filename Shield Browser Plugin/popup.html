@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Intrusion Shield Endpoint</title>
+		<link rel="stylesheet" href="css/popup.css" />
+		<meta charset="UTF-8">
+		<script src="js/popup.js"></script>
+	</head>
+	<body ng-app="popupApp" ng-controller="PopupCtrl">
+		<img src="images/INT-Logo-White_sm.png" width="110" height="" alt="Intrusion">
+
+		<div id="enabled">
+			<p id="currentStatus">Intrusion Shield: Available</p>
+			<input type="button" id="dashboardButton" value="View Dashboard" />
+			<input type="button" id="disableButton" value="Disconnect" />
+		</div>
+
+		<div id="disabled">
+			<p>Intrusion Shield: Unavailable</p>
+			<input type="text" id="ipAddress" value="" />
+			<input type="button" id="enableButton" value="Attempt Connection" />
+		</div>
+
+		<div id="small">
+			<p id="build">Build</p>
+		</div>
+	</body>
+</html>

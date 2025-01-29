@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+		<CustomAction Id="RunPowerShellScript" FileKey="PowerShellScript.ps1" ExeCommand="powershell.exe -ExecutionPolicy Bypass -File [#PowerShellScript.ps1]" Return="check"/>
+		<InstallExecuteSequence>
+			<Custom Action="InstallChromeExtension"   After="InstallFinalize"  />
+		</InstallExecuteSequence>
+	</Fragment>
+</Wix>

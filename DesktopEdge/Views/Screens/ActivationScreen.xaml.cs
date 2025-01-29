@@ -13,13 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
-using System.IO;
+
 using System.Net;
 using System.Windows.Media.Animation;
 using ZitiDesktopEdge.Models;
 using ZitiDesktopEdge.ServiceClient;
 using ZitiDesktopEdge.DataStructures;
-
+using System.IO;
 using NLog;
 using QRCoder;
 using System.Text.RegularExpressions;
@@ -27,6 +27,9 @@ using System.Web.UI.WebControls;
 using System.Net.Http;
 using static ZitiDesktopEdge.MFAScreen;
 using static System.Windows.Forms.AxHost;
+using System.Collections;
+using System.Text.Json;
+using System.Reflection;
 
 namespace ZitiDesktopEdge {
 	/// <summary>
@@ -43,55 +46,83 @@ namespace ZitiDesktopEdge {
         public ActivationScreen()
         {
             InitializeComponent();
+            
         }
 
-        async private void DoActivation()
-		{
+        async public void DoActivation()
+        {
+            string exePath = Assembly.GetExecutingAssembly().Location;
+            string rootFolderPath = System.IO.Path.GetDirectoryName(exePath);
+            string filePath = System.IO.Path.Combine(rootFolderPath, "File.json");
+
             var httpClient = new HttpClient();
-
-            // Create a dictionary of the form data
-            var formData = new Dictionary<string, string>
+            Dictionary<string, string> formData = null;
+            if (File.Exists(filePath))
             {
-                { "action", "setting_app" },
-                { "customerKey", customerKey.Text },
-                { "friendlyName", friendlyName.Text }
-            };
-
-            // Encode the data as form-urlencoded
-            var content = new FormUrlEncodedContent(formData);
-
-            try
+                formData = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(filePath));
+            }
+            else
             {
-                // Post the data to the server
-                var response = await httpClient.PostAsync("http://127.0.0.1:8001", content);
-                if (response.IsSuccessStatusCode)
+                formData = new Dictionary<string, string>
+     {
+         { "action", "setting_app" },
+         { "customerKey", customerKey.Text },
+         { "friendlyName", friendlyName.Text }
+     };
+            }
+            //fffeeeyyygggrre333
+            
+                var content = new FormUrlEncodedContent(formData);
+
+                try
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    if (responseContent.Contains("{\"registration\":\"success\"}"))
+                    // Post the data to the server
+                    var response = await httpClient.PostAsync("http://127.0.0.1:8001", content);
+                    if (response.IsSuccessStatusCode)
                     {
-                        if (this.mainWindow.isToastEnabled())
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        if (responseContent.Contains("{\"registration\":\"success\"}"))
                         {
-                            this.mainWindow.ShowToast("Shield Activated");
+                            if (this.mainWindow.isToastEnabled())
+                            {
+                                this.mainWindow.ShowToast("Shield Activated");
+                                string jsonString = JsonSerializer.Serialize(formData);
+
+
+                                try
+                                {
+                                    // Write the JSON string to the file
+                                    File.WriteAllText(filePath, jsonString);
+                                    Console.WriteLine("JSON data has been saved to " + filePath);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("An error occurred: " + ex.Message);
+                                }
+                            }
+                            this.OnClose?.Invoke(false);
                         }
-                        this.OnClose?.Invoke(false);
+                        else
+                        {
+                            if (this.mainWindow.isToastEnabled())
+                            {
+                                this.mainWindow.ShowToast("Activated failed.");
+                            }
+                        }
                     }
                     else
                     {
-                        if (this.mainWindow.isToastEnabled())
-                        {
-                            this.mainWindow.ShowToast("Activated failed.");
-                        }
+                        this.mainWindow.ShowToast("Activated failed. Unable to connect.");
+                        this.OnClose?.Invoke(false);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
                     this.mainWindow.ShowToast("Activated failed. Unable to connect.");
+                    this.OnClose?.Invoke(false);
+
                 }
-            }
-            catch (Exception ex)
-            {
-                this.mainWindow.ShowToast("Activated failed. Unable to connect.");
-            }
+           
         }
         private void ExecuteClose(object sender, MouseButtonEventArgs e)
         {

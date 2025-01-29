@@ -143,9 +143,9 @@
                     <Label Content="MENU" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="White" Height="25" Margin="0,-14,0,0" FontSize="10"></Label>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,12" MouseDown="Window_MouseDown">
-                    <Image Source="/Assets/Images/z.png" Height="40" RenderOptions.BitmapScalingMode="Fant"></Image>
+                    <Image Source="/Assets/Images/zsujith.png" Height="80" RenderOptions.BitmapScalingMode="Fant"></Image>
                     <Grid>
-                        <Label Name="ConnectedTime" HorizontalAlignment="Center" Content="00:00:00" Foreground="White"/>
+                        <!--<Label Name="ConnectedTime" Visibility="Hidden" HorizontalAlignment="Center" Content="00:00:00" Foreground="White"/>-->
                     </Grid>
                 </StackPanel>
                 <StackPanel x:Name="AddIdAreaButton" Grid.Column="2" Cursor="Hand" Orientation="Vertical" Margin="14,16,14,14" MouseLeftButtonUp="OpenIdentityChoice">
@@ -153,24 +153,33 @@
                     <Label Content="ADD" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="White" Height="25" FontSize="10" HorizontalAlignment="Right"></Label>
                     <Label Content="IDENTITY" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="White" Height="25" Margin="0,-14,0,0" FontSize="10" HorizontalAlignment="Right"></Label>
                 </StackPanel>
+
             </Grid>
-            <Canvas Name="ConnectButton" Width="400" Height="250" MouseUp="StartZitiService" Visibility="Collapsed">
+            
+
+            <Canvas Name="ConnectButton"   Width="400" Height="250" MouseUp="StartZitiService" Visibility="Collapsed">
                 <StackPanel Width="{Binding ActualWidth, ElementName=ConnectButton}" VerticalAlignment="Top" Orientation="Vertical">
-                    <!--<Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="40"/>
-                    </Grid.RowDefinitions>-->
-                    <Image Source="/Assets/Images/connect.png" Height="140" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20"/>
-                    <TextBlock Text="Click to Connect" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="20" Foreground="White"/>
+
+                    <TextBlock  Visibility="Hidden" Text="Click to Connect" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="20" Foreground="White"/>
                 </StackPanel>
             </Canvas>
-            <Canvas VerticalAlignment="Stretch" Name="DisconnectButton" Width="400" Height="200" MouseUp="Disconnect" Visibility="Collapsed">
+
+            <Canvas VerticalAlignment="Stretch"  Name="DisconnectButton" Width="400" Height="200" MouseUp="Disconnect" Visibility="Collapsed">
                 <StackPanel Width="{Binding ActualWidth, ElementName=DisconnectButton}" VerticalAlignment="Top" Orientation="Vertical">
-                    <Image Source="/Assets/Images/connected.png" Height="140" HorizontalAlignment="Center" Margin="0,0,0,20"/>
-                    <TextBlock Text="Click to Disconnect" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="20" Foreground="White"/>
+
+                    <TextBlock Visibility="Hidden"  Text="Click to Disconnect" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="20" Foreground="White"/>
                 </StackPanel>
             </Canvas>
-            <Button x:Name="ActivationButton" Width="200" Height="30" Background="Yellow" Content="Activate" HorizontalAlignment="Center" Margin="0,0,0,20" Click="DashboardButton_Click" />
+            <Label x:Name="statusmessage" Margin="0,-370,0,0"  Content="                              Disabled &#10;  &#10;Your device is not protected by Intrusion Shield" Grid.Row="3"
+                   HorizontalAlignment="Center" 
+    VerticalContentAlignment="Center" 
+    HorizontalContentAlignment="Center" 
+    Padding="0,30,0,0" 
+                   FontSize="13" Foreground="#FFFFFF" VerticalAlignment="Center" 
+        FontFamily="/ZitiDesktopEdge;component/Assets/Fonts/#Russo One"></Label>
+            <Button x:Name="ActivationButton"    Width="200" Height="30" Background="Yellow" Content="Shield Unavailable"  HorizontalAlignment="Center" Margin="0,0,0,20" Click="DashboardButton_Click" />
+            <!--<Button  Width="200" Height="30" Visibility = "Hidden"   Visibility="Hidden"   Background="Yellow" Content="Log In"  HorizontalAlignment="Center" Margin="0,0,0,20" Click="Login_Click"  />-->
+
 
             <ScrollViewer Name="IdListScroller" MinHeight="60" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}" CanContentScroll="True" ClipToBounds="True" PanningMode="VerticalOnly" PanningRatio=".1">
                 <StackPanel Name="IdList" Orientation="Vertical" IsItemsHost="False" LayoutUpdated="IdList_LayoutUpdated" FocusVisualStyle="{x:Null}"></StackPanel>
@@ -183,12 +192,37 @@
                 <Label Name="AddIdButton" Padding="0,0,0,20" Grid.Column="0" Margin="0,0,10,0" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="#FFFFFF" FontSize="16" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center" MouseDown="OpenIdentityChoice"/>
                 <!--<Label Name="AddIdViaAADButton" Padding="0,0,0,20" Grid.Column="1" Margin="10,0,0,0" Content="Add Identity via AAD" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="#FFFFFF" FontSize="16" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center" MouseDown="AddIdentityViaAAD"/>-->
             </Grid>
+            <Grid >
+
+                <ToggleButton x:Name="Toggle2" MouseUp="StartZitiService"
+                 Height="40" Width="120" Checked="Toggle2_Checked" Unchecked="Toggle2_Unchecked" Margin="0,-700,0,0">
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border x:Name="B1" Background="DarkOrange"
+                        CornerRadius="20" Padding="1">
+                                <Border x:Name="B2" Background="White"
+                            Width="{TemplateBinding Height}"
+                            CornerRadius="20" HorizontalAlignment="Left">
+                                    <ContentPresenter/>
+                                </Border>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="B2" Property="HorizontalAlignment" Value="Right"/>
+                                    <Setter TargetName="B1" Property="Background" Value="Blue"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
+                </ToggleButton>
+
+            </Grid>
         </StackPanel>
         <Canvas x:Name="AlertCanvas" ClipToBounds="False" Visibility="Collapsed">
             <Image Source="/Assets/Images/UpdateWarn.png" Canvas.Left="50" Canvas.Top="32" Width="14" Height="14"></Image>
         </Canvas>
         <!-- Form for debugging -->
-        <debug:Debugging x:Name="DebugForm" Visibility="Collapsed" />
+        <debug:Debugging x:Name="DebugForm" Visibility="Collapsed"  />
         <!-- Menu UI -->
         <local:MainMenu x:Name="MainMenu" Visibility="Collapsed"></local:MainMenu>
         <!-- ID Detail UI -->
@@ -228,7 +262,7 @@
                 <Image x:Name="InfoBlurb" Visibility="Collapsed" Source="/Assets/Images/Warning.png" Grid.Column="0" Width="30" Grid.Row="1" Height="30" Margin="0,0,0,0"></Image>
                 <Label x:Name="Blurb" Content="An Update is available!" MouseUp="BlurbAction" Grid.Column="1" Padding="0,0,0,0" Grid.Row="1" Margin="0,0,0,0" FontFamily="pack://application:,,,/Assets/Fonts/#Open Sans" Foreground="#000000" FontSize="12" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
                 <Image Source="/Assets/Images/closeBlack.png" Grid.Column="2" Width="10" Height="10" Grid.Row="1" Margin="0,0,0,0" Cursor="Hand" MouseUp="DoHideBlurb"></Image>
-            </Grid> 
+            </Grid>
         </Grid>
 
         <Grid x:Name="NoServiceView" Visibility="Collapsed" Margin="10,10,10,10">
@@ -343,8 +377,36 @@
                 </Grid>
             </Grid>
         </Grid>
+        
+        <Grid>
+        
+        <!--<ToggleButton Content="ToggleButton" HorizontalAlignment="Left" Margin="172,190,0,0" 
+                      Width="80" Height="40" IsChecked="False" Background="LightGray" BorderBrush="Black" BorderThickness="1"
+                      VerticalAlignment="Top" IsEnabledChanged="ToggleButton_IsEnabledChanged" Checked="ToggleButton_Checked"
+                      Unchecked="ToggleButton_Unchecked">
+            --><!-- ToggleButton Style --><!--
+            <ToggleButton.Style>
+                <Style TargetType="ToggleButton">
+                    <Style.Triggers>
+                        --><!-- When checked, change background color --><!--
+                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="True">
+                            <Setter Property="Background" Value="Green" />
+                            <Setter Property="Content" Value="ON" />
+                        </DataTrigger>
+
+                        --><!-- When unchecked, change background color --><!--
+                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}" Value="False">
+                            <Setter Property="Background" Value="LightGray" />
+                            <Setter Property="Content" Value="OFF" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToggleButton.Style>
+            </ToggleButton>-->
+        </Grid>
     </Grid>
     <Window.InputBindings>
         <KeyBinding x:Name="ShowDebug" Command="{Binding SomeCommand}" Key="F12" />
     </Window.InputBindings>
+    
 </Window>

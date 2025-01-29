@@ -14,6 +14,8 @@ using NLog;
 
 using ZitiDesktopEdge.DataStructures;
 using System.Reflection;
+using System.ServiceModel.Channels;
+using System.Text;
 
 namespace ZitiDesktopEdge.ServiceClient {
     public abstract class AbstractClient {
@@ -97,6 +99,10 @@ namespace ZitiDesktopEdge.ServiceClient {
             OnCommunicationError?.Invoke(this, e);
         }
 
+
+
+
+
         async protected Task sendAsync(object objToSend) {
             bool retried = false;
             while (true) {
@@ -109,9 +115,11 @@ namespace ZitiDesktopEdge.ServiceClient {
 
                     if (toSend?.Trim() != null) {
                         debugServiceCommunication(toSend);
+                        
                         await ipcWriter.WriteAsync(toSend);
-                        await ipcWriter.WriteAsync('\n');
+                       await ipcWriter.WriteAsync('\n');
                         await ipcWriter.FlushAsync();
+                   
                     } else {
                         Logger.Debug("NOT sending empty object??? " + objToSend?.ToString());
                     }
@@ -198,7 +206,8 @@ namespace ZitiDesktopEdge.ServiceClient {
             });
         }
 
-        protected void debugServiceCommunication(string msg) {
+        protected void debugServiceCommunication(string msg)
+        {
 #if DEBUGSVCCOM
             Logger.Debug(msg);
 #else
@@ -206,7 +215,8 @@ namespace ZitiDesktopEdge.ServiceClient {
 #endif
         }
 
-        async protected Task<T> readAsync<T>(StreamReader reader) where T : SvcResponse {
+        async protected Task<T> readAsync<T>(StreamReader reader) where T : SvcResponse
+        {
             string respAsString = await readMessageAsync(reader);
             T resp = (T)serializer.Deserialize(new StringReader(respAsString), typeof(T));
             return resp;
@@ -215,7 +225,7 @@ namespace ZitiDesktopEdge.ServiceClient {
         async public Task<string> readMessageAsync(StreamReader reader) {
             try {
                 int emptyCount = 1; //just a stop gap in case something crazy happens in the communication
-
+              
                 string respAsString = await reader.ReadLineAsync();
                 debugServiceCommunication(respAsString);
                 while (string.IsNullOrEmpty(respAsString?.Trim())) {
